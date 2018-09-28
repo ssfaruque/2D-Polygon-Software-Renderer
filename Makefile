@@ -6,7 +6,7 @@ INCLUDEDIR	:= include
 SRCDIR	:= src
 DEPDIR	:= build/deps
 OBJDIR	:= build/objs
-LIBS	:= -lgl -lglut
+LIBS	:= -lGL -lglut 
 
 PROGNAME	:= out
 SRCS	:= $(shell ls src)
@@ -18,13 +18,12 @@ all: $(PROGNAME)
 
 -include $(DEPS)
 
-$(PROGNAME): $(OBJDIR)/$(OBJS)
-	$(CPP) $(CPPFLAGS) -I $(INCLUDEDIR) $(LIBS) -o $@ 
+$(PROGNAME): $(patsubst %,$(OBJDIR)/%, $(OBJS)) 
+	$(CPP) $(CPPFLAGS) $^ $(LIBS) -o $@ 
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	echo $(OBJS)
-	$(CPP) $(CPPFLAGS) -c $< -o $@ -I $(INCLUDEDIR) -MMD -MF $(DEPDIR)/$(patsubst $(OBJDIR)/%.o,%.d, $@)
+	$(CPP) $(CPPFLAGS) -I $(INCLUDEDIR) -c $< -o $@ -MMD -MF $(DEPDIR)/$(patsubst $(OBJDIR)/%.o,%.d, $@)
 
 
 clean:
