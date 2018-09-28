@@ -1,6 +1,9 @@
 #ifndef APP_H
 #define APP_H
 
+class Window;
+
+
 class App
 {
     private:

@@ -1,6 +1,7 @@
 #include <GL/freeglut.h>
 
 #include "app.h"
+#include "window.h"
 
 
 App::App(int* argc, char** argv):
