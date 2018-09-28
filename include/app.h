@@ -10,7 +10,8 @@ class App
         bool m_running;
 
     public:
-        App(int* argc, char** argv);
+        App(const char* TITLE, const int WIDTH, const int HEIGHT,
+            int* argc, char** argv);
         ~App() = default;
         inline bool isRunning() const {return m_running;};
 
