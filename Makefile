@@ -29,6 +29,3 @@ clean:
 	$(RM) build/objs/*
 	$(RM) build/deps/*
 
-
-run: all
-	./out

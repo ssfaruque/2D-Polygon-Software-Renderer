@@ -25,7 +25,7 @@ void FrameBuffer::setPixel(uint x, uint y, u32 data)
      * corner of the screen with x increasing from left
      * to right and y increasing from top to botttom
      */
-    uint index = (m_width * m_height) - x * m_width + y;
+    uint index = (m_width * m_height) - y * m_width + x;
     m_buffer[index] = data;
 }
 

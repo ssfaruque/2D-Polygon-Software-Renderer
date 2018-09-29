@@ -7,6 +7,8 @@
 #include "graphics.h"
 
 
+#include <iostream>
+
 Window* Window::m_window = nullptr;
 
 
@@ -22,6 +24,7 @@ void showScreen()
     glutSwapBuffers();
 }
 
+float x = 70, y = 70;
 
 void callbackfunc()
 { 
@@ -30,12 +33,11 @@ void callbackfunc()
     Window* window = Window::getInstance();
     window->clear();
 
-    drawLine(0, 0, window->getHeight(), window->getWidth(), 0xFFFFFFFF);
+    x+=1;;
+    y+=1;;
 
-    drawPixel(window->getHeight() / 2, window->getWidth() / 2, 0xFF0000FF);
 
-
-    drawLine(0, 0, window->getHeight() - 1, window->getWidth() - 1, 0x00FF00FF);
+    drawLine(x - 70, y - 70, x, y, 0x00FF00FF);
 
     showScreen();
 }
@@ -47,7 +49,7 @@ m_width(width), m_height(height), m_title(title)
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); 
     glutInitWindowSize(width, height);
-    glutInitWindowPosition(100, 100);
+    glutInitWindowPosition(-1, -1);
     glutCreateWindow(title.c_str());
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glViewport(0, 0, width, height);
@@ -55,6 +57,7 @@ m_width(width), m_height(height), m_title(title)
     m_frameBuffer = new FrameBuffer(width, height);
 
     glutDisplayFunc(callbackfunc);
+    glutIdleFunc(callbackfunc);
 }
 
 
