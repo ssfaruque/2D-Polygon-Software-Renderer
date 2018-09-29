@@ -25,10 +25,10 @@ $(PROGNAME): $(patsubst %,$(OBJDIR)/%, $(OBJS))
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CPP) $(CPPFLAGS) -I $(INCLUDEDIR) -c $< -o $@ -MMD -MF $(DEPDIR)/$(patsubst $(OBJDIR)/%.o,%.d, $@)
 
-
 clean:
 	$(RM) build/objs/*
 	$(RM) build/deps/*
 
 
-
+run: all
+	./out

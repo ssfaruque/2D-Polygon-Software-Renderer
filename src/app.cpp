@@ -2,7 +2,7 @@
 
 #include "app.h"
 #include "window.h"
-#include "intTypes.h"
+#include "types.h"
 #include "graphics.h"
 
 App::App(const char* title, const int width, const int height,

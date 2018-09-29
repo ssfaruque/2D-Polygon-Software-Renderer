@@ -1,10 +1,17 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "intTypes.h"
+#include "types.h"
 
-void setPointSize(float size);
-void drawPixel(uint x, uint y, u8 r, u8 g, u8 b, u8 a);
+/*
+ * Draws a single pixel to the frame buffer
+ */
+void drawPixel(uint x, uint y, Color color);
+
+/*
+ * Implementation of DDA algorithm
+ */
+void drawLine(uint x1, uint y1, uint x2, uint y2, Color color);
 
 
 #endif  // GRAPHICS_H

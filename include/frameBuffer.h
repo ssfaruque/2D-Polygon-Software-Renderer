@@ -1,7 +1,7 @@
 #ifndef FRAME_BUFFER_H
 #define FRAME_BUFFER_H
 
-#include "intTypes.h"
+#include "types.h"
 
 class FrameBuffer
 {
@@ -13,8 +13,10 @@ class FrameBuffer
     public:
         FrameBuffer(uint width, uint height);
         ~FrameBuffer();
+        
         void setPixel(uint x, uint y, u32 data);
         inline u32* getBuffer() const {return m_buffer;}
+        void clear(Color color = {0});
 
     friend class Window;
 };

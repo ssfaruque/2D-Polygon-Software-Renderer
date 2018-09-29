@@ -1,23 +1,37 @@
 #include <GL/freeglut.h>
+#include <cassert>
 
-#include "graphics.h"
 #include "window.h"
-
-void setPointSize(float size)
-{
-    glPointSize(size);
-}
+#include "frameBuffer.h"
+#include "graphics.h"
 
 
- void drawPixel(uint x, uint y, u8 r, u8 g, u8 b, u8 a)
+
+ void drawPixel(uint x, uint y, Color color)
  {
-    //  float normalizedX;
-    //  float normalizedY;
+    Window* window = Window::getInstance();
 
-     glBegin(GL_POINTS);
-
-     glColor4f(r, g, b, a);
-     glVertex2f(0.0f, 0.0f);
-
-     glEnd();
+    window->getFrameBuffer()->setPixel(x, y, color.color);
  }               
+
+
+ void drawLine(uint x1, uint y1, uint x2, uint y2, Color color)
+ {
+    int deltaX  = x2 - x1;
+    int deltaY  = y2 - y1;
+    //float slope = deltaY / deltaX;
+
+    int numSteps = deltaX > deltaY ? deltaX : deltaY;
+    float xStep = deltaX / numSteps;
+    float yStep = deltaY / numSteps;
+    float roundTerm = 0.5f;
+    float x = x1;
+    float y = y1;
+
+    for(int step = 0; step < numSteps; ++step)
+    {
+        drawPixel((uint)(x + roundTerm), (uint)(y + roundTerm), color);
+        x += xStep;
+        y += yStep;
+    }
+ }

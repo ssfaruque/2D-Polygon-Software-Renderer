@@ -21,10 +21,17 @@ FrameBuffer::~FrameBuffer()
 void FrameBuffer::setPixel(uint x, uint y, u32 data)
 {
     /* This method of indexing results in
-     * coordinate (0,0) being the upper left hand
+     * coordinate (0,0) being in the upper left hand
      * corner of the screen with x increasing from left
      * to right and y increasing from top to botttom
      */
     uint index = (m_width * m_height) - x * m_width + y;
     m_buffer[index] = data;
+}
+
+
+void FrameBuffer::clear(Color color)
+{
+    for(uint i = 0; i < m_width * m_height; ++i)
+        m_buffer[i] = color.color;
 }

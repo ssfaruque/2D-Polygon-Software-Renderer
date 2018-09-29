@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "intTypes.h"
+#include "types.h"
 
 
 class FrameBuffer;
@@ -28,6 +28,7 @@ class Window
         inline uint getWidth() const {return m_width;};
         inline uint getHeight() const {return m_height;};
         FrameBuffer* getFrameBuffer() {return m_frameBuffer;}
+        void clear(Color color = {0});
 
 
     
