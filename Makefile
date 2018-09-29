@@ -1,17 +1,17 @@
 
-CPP	:= g++
+CPP			:= g++
 CPPFLAGS	:= -g -Wall -Werror
 
 INCLUDEDIR	:= include
-SRCDIR	:= src
-DEPDIR	:= build/deps
-OBJDIR	:= build/objs
-LIBS	:= -lGL -lglut 
+SRCDIR		:= src
+DEPDIR		:= build/deps
+OBJDIR		:= build/objs
+LIBS		:= -lGL -lglut 
 
 PROGNAME	:= out
-SRCS	:= $(shell ls src)
-OBJS	:= $(SRCS:.cpp=.o)
-DEPS	:= $(OBJS:.o=.d)
+SRCS		:= $(shell ls src)
+OBJS		:= $(SRCS:.cpp=.o)
+DEPS		:= $(OBJS:.o=.d)
 
 
 all: $(PROGNAME)

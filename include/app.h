@@ -8,12 +8,14 @@ class App
 {
     private:
         bool m_running;
+        Window* m_window;
 
     public:
-        App(const char* TITLE, const int WIDTH, const int HEIGHT,
+        App(const char* title, const int width, const int height,
             int* argc, char** argv);
-        ~App() = default;
+        ~App();
         inline bool isRunning() const {return m_running;};
+        void run();
 
     
 };
