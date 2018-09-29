@@ -3,20 +3,21 @@
 #include "app.h"
 #include "window.h"
 #include "intTypes.h"
-
+#include "graphics.h"
 
 App::App(const char* title, const int width, const int height,
             int* argc, char** argv):
 m_running(true)
 {
-    m_window = new Window(width, height, title, argc, argv);
+    Window::create(width, height, title, argc, argv);
+    m_window = Window::getInstance();
 }
 
 
 App::~App()
 {
     if(m_window)
-        delete m_window;
+        Window::destroy();
 }
 
 

@@ -15,10 +15,21 @@ class Window
         uint m_height;
         std::string m_title;
         FrameBuffer* m_frameBuffer;
+        static Window* m_window;
+
+    private:
+        Window(uint width, uint height, std::string title, int* argc, char** argv);
 
     public:
-        Window(uint width, uint height, std::string title, int* argc, char** argv);
         ~Window();
+        static void create(uint width, uint height, std::string title, int* argc, char** argv);
+        static Window* getInstance();
+        static void destroy();
+        inline uint getWidth() const {return m_width;};
+        inline uint getHeight() const {return m_height;};
+        FrameBuffer* getFrameBuffer() {return m_frameBuffer;}
+
+
     
 };
 
