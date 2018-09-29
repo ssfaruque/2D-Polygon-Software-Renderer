@@ -28,8 +28,6 @@ void callbackfunc()
 }
 
 
-
-
 Window::Window(uint width, uint height, std::string title, int* argc, char** argv):
 m_width(width), m_height(height), m_title(title)
 {

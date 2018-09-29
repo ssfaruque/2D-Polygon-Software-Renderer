@@ -5,6 +5,7 @@
 
 #include "intTypes.h"
 
+
 class FrameBuffer;
 
 class Window
