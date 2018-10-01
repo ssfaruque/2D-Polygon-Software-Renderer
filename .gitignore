@@ -4,6 +4,8 @@
 build/objs/*
 build/deps/*
 
+out
+
 # Prerequisites
 *.d
 
