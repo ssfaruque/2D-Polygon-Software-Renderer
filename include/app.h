@@ -15,14 +15,14 @@ class App
             int* argc, char** argv);
         ~App();
         inline bool isRunning() const {return m_running;};
+
+        /* Reigster necessary callbacks and
+         * run main loop
+         */
         void run();
 
     
 };
-
-
-
-
 
 
 #endif  // APP_H

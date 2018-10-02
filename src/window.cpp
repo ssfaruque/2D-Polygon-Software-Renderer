@@ -1,51 +1,19 @@
 #include <GL/freeglut.h>
-#include <cstring>
+#include <iostream>
 
 #include "window.h"
 #include "frameBuffer.h"
-
 #include "graphics.h"
 
 
-#include <iostream>
-
 Window* Window::m_window = nullptr;
-
-
-void showScreen()
-{
-    Window* window = Window::getInstance();
-
-    glDrawPixels(window->getWidth(),
-                 window->getHeight(),
-                 GL_RGBA,
-                 GL_UNSIGNED_INT_8_8_8_8,
-                 window->getFrameBuffer()->getBuffer());
-    glutSwapBuffers();
-}
-
-float x = 70, y = 70;
-
-void callbackfunc()
-{ 
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    Window* window = Window::getInstance();
-    window->clear();
-
-    x+=1;;
-    y+=1;;
-
-
-    drawLine(x - 70, y - 70, x, y, 0x00FF00FF);
-
-    showScreen();
-}
 
 
 Window::Window(uint width, uint height, std::string title, int* argc, char** argv):
 m_width(width), m_height(height), m_title(title)
 {
+    std::cout << "Creating window..." << std::endl;
+
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); 
     glutInitWindowSize(width, height);
@@ -55,9 +23,6 @@ m_width(width), m_height(height), m_title(title)
     glViewport(0, 0, width, height);
 
     m_frameBuffer = new FrameBuffer(width, height);
-
-    glutDisplayFunc(callbackfunc);
-    glutIdleFunc(callbackfunc);
 }
 
 

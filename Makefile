@@ -1,6 +1,6 @@
 
 CPP			:= g++
-CPPFLAGS	:= -g -Wall -Werror -std=c++14
+CPPFLAGS	:= -g -Wall -Werror -std=c++11
 
 INCLUDEDIR	:= include
 SRCDIR		:= src

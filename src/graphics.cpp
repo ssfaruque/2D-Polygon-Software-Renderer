@@ -36,7 +36,7 @@ inline uint absVal(int num) {return num > 0 ? num : (num * -1);}
  }
 
 
-void DDA(uint x1, uint y1, uint x2, uint y2, Color color)
+void dda(uint x1, uint y1, uint x2, uint y2, Color color)
 {
     int deltaX  = x2 - x1;
     int deltaY  = y2 - y1;

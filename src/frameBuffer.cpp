@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstring>
 
 #include "frameBuffer.h"
@@ -5,8 +6,8 @@
 FrameBuffer::FrameBuffer(uint width, uint height):
 m_width(width), m_height(height)
 {
+    std::cout << "Creating frame buffer..." << std::endl;
     m_buffer = new u32[width * height];
-
     memset(m_buffer, 0, sizeof(u32) * width * height);    
 }
 
