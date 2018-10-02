@@ -31,14 +31,12 @@ App::~App()
 void App::run()
 {
     std::cout << "Loading scene..." << std::endl;
-    
+
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);
     glutMainLoop();
 }
 
-
-float x = 0, y  = 0;
 
 void renderScene()
 {
@@ -47,11 +45,9 @@ void renderScene()
     Window* window = Window::getInstance();
     window->clear();
 
-    x+=1;;
-    y+=1;;
+    bresenham(0.9f, -0.8f, 0.0f, 0.0f, 0xffffffff);
 
-
-    drawLine(x - 70, y - 70, x, y, 0x00FF00FF);
+    //dda(0.1f, 0.1f, 0.2f, -0.8f, 0xff0000ff);
 
     showScreen();
 }

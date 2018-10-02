@@ -4,9 +4,19 @@
 #include "types.h"
 
 /*
+ * Converts normalized device coordinates
+ * into screen coordinates
+ */
+void normalToScreenCoords(float* x, float* y);
+
+
+
+
+/*
  * Draws a single pixel to the frame buffer
  */
-void drawPixel(uint x, uint y, Color color);
+void drawPixel(float x, float y, Color color, bool normalized = true);
+
 
 
 /*
@@ -18,12 +28,13 @@ void drawLine(uint x1, uint y1, uint x2, uint y2, Color color);
 /*
  * Implementation of DDA algorithm
  */
-void dda(uint x1, uint y1, uint x2, uint y2, Color color);
+void dda(float x1, float y1, float x2, float y2, Color color);
 
 
 /*
  * Implementation of Bresenham algorithm
  */
-void bresenham(uint x1, uint y1, uint x2, uint y2, Color color);
+void bresenham(float x1, float y1, float x2, float y2, Color color);
+
 
 #endif  // GRAPHICS_H

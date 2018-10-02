@@ -3,7 +3,6 @@
 
 class Window;
 
-
 class App
 {
     private:
@@ -20,8 +19,6 @@ class App
          * run main loop
          */
         void run();
-
-    
 };
 
 

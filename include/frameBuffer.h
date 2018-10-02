@@ -15,6 +15,7 @@ class FrameBuffer
         ~FrameBuffer();
         
         void setPixel(uint x, uint y, u32 data);
+        //void setPixel(float x, float y, u32 data);
         inline u32* getBuffer() const {return m_buffer;}
         void clear(Color color = {0});
 
