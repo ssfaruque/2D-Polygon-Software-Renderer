@@ -1,12 +1,24 @@
 
 CPP			:= g++
-CPPFLAGS	:= -g -Wall -Werror -std=c++11
+CPPFLAGS	:= -g -Wall -std=c++11
 
 INCLUDEDIR	:= include
 SRCDIR		:= src
 DEPDIR		:= build/deps
 OBJDIR		:= build/objs
-LIBS		:= -lGL -lglut 
+
+OS := $(shell uname -s)
+
+ifeq ($(OS), Linux)
+    LIBS	:= -lGL -lglut
+	CPPFLAGS += -Werror
+endif
+
+ifeq ($(OS), Darwin)
+    LIBS	:= -framework OpenGL -framework GLUT
+	CPPFLAGS += -Wno-deprecated-declarations
+endif
+
 
 PROGNAME	:= out
 SRCS		:= $(shell ls src)
@@ -28,4 +40,5 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 clean:
 	$(RM) build/objs/*
 	$(RM) build/deps/*
+	$(RM) out
 

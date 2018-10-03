@@ -1,4 +1,10 @@
-#include <GL/freeglut.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#endif
+#ifdef __linux__
+#include <GL/glut.h>
+#endif
+
 #include <iostream>
 
 #include "window.h"

@@ -1,4 +1,10 @@
-#include <GL/freeglut.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#endif
+#ifdef __linux__
+#include <GL/glut.h>
+#endif
+
 #include <iostream>
 
 #include "app.h"
@@ -45,7 +51,7 @@ void renderScene()
     Window* window = Window::getInstance();
     window->clear();
 
-    bresenham(0.9f, -0.8f, 0.0f, 0.0f, 0xffffffff);
+    bresenham(0.9f, -0.8f, -0.4f, -0.5f, 0xff0000ff);
 
     //dda(0.1f, 0.1f, 0.2f, -0.8f, 0xff0000ff);
 
