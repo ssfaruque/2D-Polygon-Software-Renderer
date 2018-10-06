@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include <vector>
+
 #include "types.h"
 
 /*
@@ -35,6 +37,15 @@ void dda(float x1, float y1, float x2, float y2, Color color);
  * Implementation of Bresenham algorithm
  */
 void bresenham(float x1, float y1, float x2, float y2, Color color);
+
+
+
+/*
+ * Implementation of scan line polygon fill algorithm
+ */
+void polygonFill(const std::vector<Vertex>& vertices);
+
+
 
 
 #endif  // GRAPHICS_H

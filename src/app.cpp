@@ -6,6 +6,7 @@
 #endif
 
 #include <iostream>
+#include <vector>
 
 #include "app.h"
 #include "window.h"
@@ -51,9 +52,32 @@ void renderScene()
     Window* window = Window::getInstance();
     window->clear();
 
-    bresenham(0.9f, -0.8f, -0.4f, -0.5f, 0xff0000ff);
+    std::vector<Vertex> vertices;
 
-    //dda(0.1f, 0.1f, 0.2f, -0.8f, 0xff0000ff);
+    Vertex v1(0.0f, 0.2f);
+    Vertex v2(0.5f, 0.5f);
+    Vertex v3(0.5f, -0.5f);
+    Vertex v4(0.0f, -0.2f);
+    Vertex v5(-0.5f, -0.5f);
+    Vertex v6(-0.5f, 0.5f);
+
+
+    bresenham(v1.x, v1.y, v2.x, v2.y, 0xff0000ff);
+    bresenham(v2.x, v2.y, v3.x, v3.y, 0xff0000ff);
+    bresenham(v3.x, v3.y, v4.x, v4.y, 0xff0000ff);
+    bresenham(v4.x, v4.y, v5.x, v5.y, 0xff0000ff);
+    bresenham(v5.x, v5.y, v6.x, v6.y, 0xff0000ff);
+    bresenham(v6.x, v6.y, v1.x, v1.y, 0xff0000ff);
+
+
+    vertices.push_back(v1);
+    vertices.push_back(v2);
+    vertices.push_back(v3);
+    vertices.push_back(v4);
+    vertices.push_back(v5);
+    vertices.push_back(v6);
+
+    polygonFill(vertices);
 
     showScreen();
 }

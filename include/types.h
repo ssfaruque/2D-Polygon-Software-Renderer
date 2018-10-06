@@ -36,4 +36,30 @@ struct Color
 };
 
 
+struct Vertex
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    Vertex(float px = 0.0f, float py = 0.0f, float pz = 0.0f, float pw = 0.0f) :
+    x(px), y(py), z(pz), w(pw)
+    {}   
+};
+
+
+struct Edge
+{
+    float yMax;
+    float yMin;
+    float startingX;
+    float slope;
+
+    Edge(float pyMax, float pyMin, float pstartingX, float pslope):
+    yMax(pyMax), yMin(pyMin), startingX(pstartingX), slope(pslope)
+    {}
+};
+
+
 #endif  // TYPES_H

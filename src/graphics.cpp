@@ -1,12 +1,14 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #endif
+
 #ifdef __linux__
 #include <GL/glut.h>
 #endif
 
 #include <cassert>
 #include <iostream>
+#include <algorithm>
 
 #include "window.h"
 #include "frameBuffer.h"
@@ -161,3 +163,66 @@ void bresenhamHighSlope(uint x1, uint y1, uint x2, uint y2, Color color)
         error += (2 * deltaX);
     }
 }
+
+
+
+std::vector<Edge> createEdgeList(const std::vector<Vertex>& vertices)
+{
+    std::vector<Edge> edgeList{};
+
+    for(int i = 0; i < (int)vertices.size(); ++i)
+    {
+        float yMax, yMin, startingX, slope;
+
+        if(i == (int)(vertices.size() - 1))
+        {
+            yMax = vertices[i].y > vertices[0].y ? vertices[i].y : vertices[0].y;
+            yMin = vertices[i].y < vertices[0].y ? vertices[i].y : vertices[0].y;
+            startingX = yMin == vertices[i].y ? vertices[i].x : vertices[0]. x;
+            slope = vertices[i].x < vertices[0].x ?
+                    (vertices[0].y - vertices[i].y) / (vertices[0].x - vertices[i].x) :
+                    (vertices[i].y - vertices[0].y) / (vertices[i].x - vertices[0].x);
+                    
+            edgeList.emplace_back(yMax, yMin, startingX, slope);
+        }
+
+        else
+        {
+            yMax = vertices[i].y > vertices[i + 1].y ? vertices[i].y : vertices[i + 1].y;
+            yMin = vertices[i].y < vertices[i + 1].y ? vertices[i].y : vertices[i + 1].y;
+            startingX = yMin == vertices[i].y ? vertices[i].x : vertices[i + 1]. x;
+            slope = vertices[i].x < vertices[i + 1].x ?
+                    (vertices[i + 1].y - vertices[i].y) / (vertices[i + 1].x - vertices[i].x) :
+                    (vertices[i].y - vertices[i + 1].y) / (vertices[i].x - vertices[i + 1].x);
+
+            edgeList.emplace_back(yMax, yMin, startingX, slope);
+        }
+    }
+
+    std::sort(edgeList.begin(),
+              edgeList.end(),
+              [](const Edge& e1, const Edge& e2){return e1.startingX < e2.startingX;});
+
+    return edgeList;
+}
+
+
+
+void polygonFill(const std::vector<Vertex>& vertices)
+{
+    std::vector<Edge> edgeList = createEdgeList(vertices);
+    std::vector<Edge> activeEdgeList;
+
+    std::cout << "** CONTENTS OF EDGE LIST **" << std::endl;
+    for(auto& edge : edgeList)
+    {
+        std::cout << "starting x: " << edge.startingX << ", " 
+                  << "slope: " << edge.slope << ", "
+                  << "yMin: " << edge.yMin << ", "
+                  << "yMax: " << edge.yMax << std::endl;                 
+    }
+    std::cout << std::endl;
+
+
+}
+
