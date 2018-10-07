@@ -244,8 +244,13 @@ std::vector<std::vector<Edge>> createEdgeList(const std::vector<Edge>& edges)
 
         for(auto& edge : edges)
         {
+            if(scanLine == 432)
+            {
+                std::cout << "HJE";
+            }
+
             // add to active edge list
-            if(scanLine == edge.yMin)
+            if(scanLine == int(edge.yMin))
                 edgeList[index].push_back(edge);
         }
 
@@ -296,7 +301,7 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
         // y Max - 250
 
 
-        if(scanLine == yMax - 252)
+        if(scanLine == yMax - 110)
         {
             std::cout << "Start debugging here" << std::endl;
         }
@@ -332,7 +337,6 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
         auto newEnd = std::remove_if(activeEdgeList.begin(),
                         activeEdgeList.end(),
                         [&scanLine](const Edge& e) {return uint(e.yMax) == uint(scanLine);});
-
         activeEdgeList.erase(newEnd, activeEdgeList.end());
 
         for(auto& edge : activeEdgeList)
