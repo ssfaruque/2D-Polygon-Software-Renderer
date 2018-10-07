@@ -54,10 +54,10 @@ struct Edge
     float yMax;
     float yMin;
     float startingX;
-    float slope;
+    float slopeInv;
 
-    Edge(float pyMax, float pyMin, float pstartingX, float pslope):
-    yMax(pyMax), yMin(pyMin), startingX(pstartingX), slope(pslope)
+    Edge(float pyMax = 0.0f, float pyMin = 0.0f, float pstartingX = 0.0f, float pslopeInv = 0.0f):
+    yMax(pyMax), yMin(pyMin), startingX(pstartingX), slopeInv(pslopeInv)
     {}
 };
 

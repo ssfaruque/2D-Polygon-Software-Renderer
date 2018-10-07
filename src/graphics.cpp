@@ -22,7 +22,7 @@ void bresenhamHighSlope(uint x1, uint y1, uint x2, uint y2, Color color);
 inline uint absVal(int num) { return num > 0 ? num : (num * -1); }
 
 
-void normalToScreenCoords(float *x, float *y)
+void normalToScreenCoords(float* x, float* y)
 {
     Window *window = Window::getInstance();
     *x = (window->getWidth() / 2) * (*x + 1);
@@ -67,6 +67,10 @@ void drawLine(uint x1, uint y1, uint x2, uint y2, Color color)
 }
 
 
+
+
+
+
 void dda(float x1, float y1, float x2, float y2, Color color)
 {
     normalToScreenCoords(&x1, &y1);
@@ -91,6 +95,11 @@ void dda(float x1, float y1, float x2, float y2, Color color)
         y += yStep;
     }
 }
+
+
+
+
+
 
 
 void bresenham(float x1, float y1, float x2, float y2, Color color)
@@ -166,63 +175,158 @@ void bresenhamHighSlope(uint x1, uint y1, uint x2, uint y2, Color color)
 
 
 
-std::vector<Edge> createEdgeList(const std::vector<Vertex>& vertices)
+
+
+
+
+std::vector<Edge> createEdges(const std::vector<Vertex>& vertices)
 {
-    std::vector<Edge> edgeList{};
+    std::vector<Edge> edges{};
 
     for(int i = 0; i < (int)vertices.size(); ++i)
     {
-        float yMax, yMin, startingX, slope;
+        float yMax, yMin, startingX, slopeInv;
 
         if(i == (int)(vertices.size() - 1))
         {
             yMax = vertices[i].y > vertices[0].y ? vertices[i].y : vertices[0].y;
             yMin = vertices[i].y < vertices[0].y ? vertices[i].y : vertices[0].y;
             startingX = yMin == vertices[i].y ? vertices[i].x : vertices[0]. x;
-            slope = vertices[i].x < vertices[0].x ?
-                    (vertices[0].y - vertices[i].y) / (vertices[0].x - vertices[i].x) :
-                    (vertices[i].y - vertices[0].y) / (vertices[i].x - vertices[0].x);
-                    
-            edgeList.emplace_back(yMax, yMin, startingX, slope);
+            slopeInv = vertices[i].x < vertices[0].x ?
+                    (vertices[0].x - vertices[i].x) / (vertices[0].y - vertices[i].y) :
+                    (vertices[i].x - vertices[0].x) / (vertices[i].y - vertices[0].y);                    
         }
 
         else
         {
             yMax = vertices[i].y > vertices[i + 1].y ? vertices[i].y : vertices[i + 1].y;
             yMin = vertices[i].y < vertices[i + 1].y ? vertices[i].y : vertices[i + 1].y;
-            startingX = yMin == vertices[i].y ? vertices[i].x : vertices[i + 1]. x;
-            slope = vertices[i].x < vertices[i + 1].x ?
-                    (vertices[i + 1].y - vertices[i].y) / (vertices[i + 1].x - vertices[i].x) :
-                    (vertices[i].y - vertices[i + 1].y) / (vertices[i].x - vertices[i + 1].x);
-
-            edgeList.emplace_back(yMax, yMin, startingX, slope);
+            startingX = yMin == vertices[i].y ? vertices[i].x : vertices[i + 1].x;
+            slopeInv = vertices[i].x < vertices[i + 1].x ?
+                    (vertices[i + 1].x - vertices[i].x) / (vertices[i + 1].y - vertices[i].y) :
+                    (vertices[i].x - vertices[i + 1].x) /(vertices[i].y - vertices[i + 1].y);
         }
+
+        // don't include horizontal edges
+        if((int)yMin == (int)yMax) continue;
+
+        edges.emplace_back(yMax, yMin, startingX, slopeInv);
     }
 
-    std::sort(edgeList.begin(),
-              edgeList.end(),
-              [](const Edge& e1, const Edge& e2){return e1.startingX < e2.startingX;});
+    std::sort(edges.begin(),
+              edges.end(),
+              [](const Edge& e1, const Edge& e2)
+              {return e1.yMin < e2.yMin;});
 
-    return edgeList;
+    return edges;
+}
+
+
+std::vector<std::vector<Edge>> createEdgeList(const std::vector<Edge>& edges)
+{
+    float yMin = edges[0].yMin, yMax = edges[0].yMax;
+
+    for(auto& edge : edges)
+    {
+        if(yMax < edge.yMax) yMax = edge.yMax;
+        if(yMin > edge.yMin) yMin = edge.yMin;
+    }
+
+    // std::cout << "Lowest y point: " << yMin << std::endl;
+    // std::cout << "Highest y point: " << yMax << std::endl << std::endl;
+
+    // allocate size to total num of scanlines
+    std::vector<std::vector<Edge>> edgeList(yMax - yMin + 1); 
+
+    for(int scanLine = yMin; scanLine <= yMax; ++scanLine)
+    {
+        int index = scanLine - yMin;
+
+        for(auto& edge : edges)
+        {
+            // add to active edge list
+            if(scanLine == edge.yMin)
+                edgeList[index].push_back(edge);
+        }
+
+        sort(edgeList[index].begin(),
+             edgeList[index].end(),
+             [](const Edge& e1, const Edge& e2)
+             {return e1.startingX < e2.startingX;});
+    }
+
+    return edgeList;   
 }
 
 
 
-void polygonFill(const std::vector<Vertex>& vertices)
+void printEdges(const std::vector<Edge>& edgeList)
 {
-    std::vector<Edge> edgeList = createEdgeList(vertices);
-    std::vector<Edge> activeEdgeList;
-
     std::cout << "** CONTENTS OF EDGE LIST **" << std::endl;
     for(auto& edge : edgeList)
     {
         std::cout << "starting x: " << edge.startingX << ", " 
-                  << "slope: " << edge.slope << ", "
+                  << "slope: " << 1 / edge.slopeInv << ", "
                   << "yMin: " << edge.yMin << ", "
                   << "yMax: " << edge.yMax << std::endl;                 
     }
     std::cout << std::endl;
+}
 
 
+void polygonFill(const std::vector<Vertex>& vertices, Color color)
+{
+    // supposed to add only non horizontal edges to table
+    std::vector<Edge> edges = createEdges(vertices);
+    printEdges(edges);
+    std::vector<std::vector<Edge>> edgeList = createEdgeList(edges);
+
+    float yMin = edges[0].yMin, yMax = edges[0].yMax;
+
+    for(auto& edge : edges)
+    {
+        if(yMax < edge.yMax) yMax = edge.yMax;
+        if(yMin > edge.yMin) yMin = edge.yMin;
+    }
+
+    std::vector<Edge> activeEdgeList{};
+
+    for(int scanLine = yMin; scanLine <= yMax; ++scanLine)
+    {
+        int index = scanLine - yMin;
+
+        // adds new edges to active edge list
+        if(!edgeList[index].empty())
+        {
+            for(auto& edge : edgeList[index])
+                activeEdgeList.push_back(edge);
+        }
+
+        std::sort(activeEdgeList.begin(),
+                  activeEdgeList.end(),
+                  [](const Edge& e1, const Edge& e2){return e1.startingX < e2.startingX;});
+
+
+        if(activeEdgeList.size() > 1)
+        {
+            for(int i = 0; i < (int)activeEdgeList.size(); i += 2)
+            {
+                for(float x1 = activeEdgeList[i].startingX,
+                    x2 = activeEdgeList[i + 1].startingX;
+                    x1 < x2;
+                     ++x1)
+                        drawPixel(x1, scanLine, color, false);
+                     
+            }
+        }
+        
+        // removes all edges in active edge list that we are finished with
+         std::remove_if(activeEdgeList.begin(),
+                        activeEdgeList.end(),
+                        [&scanLine](const Edge& e) {return e.yMax == scanLine;});
+
+        for(auto& edge : activeEdgeList)
+            edge.startingX += edge.slopeInv;
+    }
 }
 

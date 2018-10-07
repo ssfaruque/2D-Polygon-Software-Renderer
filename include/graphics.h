@@ -12,13 +12,10 @@
 void normalToScreenCoords(float* x, float* y);
 
 
-
-
 /*
  * Draws a single pixel to the frame buffer
  */
 void drawPixel(float x, float y, Color color, bool normalized = true);
-
 
 
 /*
@@ -39,13 +36,10 @@ void dda(float x1, float y1, float x2, float y2, Color color);
 void bresenham(float x1, float y1, float x2, float y2, Color color);
 
 
-
 /*
  * Implementation of scan line polygon fill algorithm
  */
-void polygonFill(const std::vector<Vertex>& vertices);
-
-
+void polygonFill(const std::vector<Vertex>& vertices, Color color);
 
 
 #endif  // GRAPHICS_H

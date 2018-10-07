@@ -22,9 +22,9 @@ FrameBuffer::~FrameBuffer()
 void FrameBuffer::setPixel(uint x, uint y, u32 data)
 {
     /* This method of indexing results in
-     * coordinate (0,0) being in the upper left hand
+     * coordinate (0,0) being in the lower left hand
      * corner of the screen with x increasing from left
-     * to right and y increasing from top to botttom
+     * to right and y increasing from bottom to top
      */
     //uint index = (m_width * m_height) - y * m_width + x;
     uint index = y * m_width + x;
@@ -32,25 +32,6 @@ void FrameBuffer::setPixel(uint x, uint y, u32 data)
     //std::cout << "Screen coords -> " << "x: " << x << ", y: " << y << std::endl << std::endl;
 
 }
-
-
-
-
-
-/*void FrameBuffer::setPixel(float x, float y, u32 data)
-{
-    std::cout << "Using float version of setPixel" << std::endl;
-
-    std::cout << "Normalized coords -> " << "x: " << x << ", y: " << y << std::endl;
-
-    normalToScreenCoords(&x, &y);
-
-    std::cout << "Screen coords -> " << "x: " << x << ", y: " << y << std::endl << std::endl;
-
-    uint index = (m_width * m_height) - y * m_width + x;
-    m_buffer[index] = data;
-}*/
-
 
 
 void FrameBuffer::clear(Color color)
