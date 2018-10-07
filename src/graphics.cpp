@@ -362,9 +362,9 @@ uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float y
 inline bool isInside(uint code1, uint code2) {return !(code1 | code2);}
 inline bool isOutside(uint code1, uint code2) {return (code1 & code2);}
 
-std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax)
+void lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color, LineMethod method)
 {
-    std::vector<Vertex> clippedVertices{};
+    float boundaryOffset = 0.0000001f;
 
     for(uint i = 0, size = uint(vertices.size()); i < size; ++i)
     {
@@ -373,13 +373,13 @@ std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices,
 
         uint code1 = computeCoding(v1.x, v1.y, xmin, xmax, ymin, ymax);
         uint code2 = computeCoding(v2.x, v2.y, xmin, xmax, ymin, ymax);
+        bool drawLine = false;
 
         while(true)
         {
             if(isInside(code1, code2))
             {
-                clippedVertices.push_back(v1);
-                clippedVertices.push_back(v2);
+                drawLine = true;
                 break;
             }
             
@@ -394,25 +394,25 @@ std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices,
                 if(outsideCoding & LEFT)
                 {
                     y = v1.y + (v2.y - v1.y) * (xmin - v1.x) / (v2.x - v1.x);
-                    x = xmin;
+                    x = xmin + boundaryOffset;
                 }
 
                 else if(outsideCoding & RIGHT)
                 {
                     y = v1.y + (v2.y - v1.y) * (xmax - v1.x) / (v2.x - v1.x);
-                    x = xmax;
+                    x = xmax - boundaryOffset;
                 }
 
                 else if(outsideCoding & BOTTOM)
                 {
                     x = v1.x + (v2.x - v1.x) * (ymin - v1.y) / (v2.y - v1.y);
-                    y = ymin;
+                    y = ymin + boundaryOffset;
                 }
 
                 else if(outsideCoding & TOP)
                 {
-                    x = v1.x + (v2.x - v1.x) + (ymax - v1.y) * (v2.y - v1.y);
-                    y = ymax;
+                    x = v1.x + (v2.x - v1.x) * (ymax - v1.y) / (v2.y - v1.y);
+                    y = ymax - boundaryOffset;
                 }
 
                 if(code1 == outsideCoding)
@@ -431,7 +431,13 @@ std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices,
                 }
             }
         }
-    }
 
-    return clippedVertices;
+        if(drawLine)
+        {
+            if(method == BRESENHAM)
+                bresenham(v1.x, v1.y, v2.x, v2.y, color);
+            else if(method == DDA)
+                dda(v1.x, v1.y, v2.x, v2.y, color);
+        }
+    }
 }

@@ -165,35 +165,16 @@ void renderScene()
 
 
     Vertex v1(1.5f, 0.0f);
-    Vertex v2(0.0f, -0.6f);
+    Vertex v2(0.0f, -1.6f);
     Vertex v3(-1.4f, 0.2f);
-    Vertex v4(0.1f, 0.8f);
+    Vertex v4(0.1f, 1.1f);
 
     vertices.push_back(v1);
     vertices.push_back(v2);
     vertices.push_back(v3);
     vertices.push_back(v4);
 
-    std::vector<Vertex> clippedVertices = lineClipCohenSutherland(vertices, -0.9999f, 0.9999f, -0.9999f, 0.9999f);
-
-    // draw lines
-    for(int i = 0, size = (int)clippedVertices.size(); i < size; ++i)
-    {
-        if(i == size - 1)
-            bresenham(clippedVertices[i].x,
-                      clippedVertices[i].y,
-                      clippedVertices[0].x,
-                      clippedVertices[0].y,
-                      0xffffffff);
-        
-        else
-            bresenham(clippedVertices[i].x,
-                      clippedVertices[i].y,
-                      clippedVertices[i + 1].x,
-                      clippedVertices[i + 1].y,
-                      0xffffffff);
-
-    }
+    lineClipCohenSutherland(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
 
     //for(auto& v : clippedVertices) {normalToScreenCoords(&v.x, &v.y);}
 

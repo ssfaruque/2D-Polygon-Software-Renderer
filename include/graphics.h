@@ -5,6 +5,13 @@
 
 #include "types.h"
 
+enum LineMethod
+{
+    DDA,
+    BRESENHAM
+};
+
+
 /*
  * Converts normalized device coordinates
  * into screen coordinates
@@ -47,7 +54,7 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color);
 /*
  * Implementation of Cohen Sutherland line clipping algorithm
  */
-std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax);
+void lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color, LineMethod method = BRESENHAM);
 
 
 
