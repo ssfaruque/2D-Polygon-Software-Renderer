@@ -13,6 +13,7 @@
 #include "frameBuffer.h"
 #include "types.h"
 #include "graphics.h"
+#include "math.h"
 
 
 void renderScene();
@@ -159,7 +160,9 @@ void renderScene()
     // vertices.push_back(v9);
 
 
-
+    Matrix4 matrix;
+    
+    matrix = matrix + 7;
 
 
 
@@ -174,7 +177,7 @@ void renderScene()
     vertices.push_back(v3);
     vertices.push_back(v4);
 
-    lineClipCohenSutherland(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
+    cohenSutherlandClipping(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
 
     //for(auto& v : clippedVertices) {normalToScreenCoords(&v.x, &v.y);}
 

@@ -10,9 +10,10 @@
 #include <iostream>
 #include <algorithm>
 
+#include "graphics.h"
 #include "window.h"
 #include "frameBuffer.h"
-#include "graphics.h"
+#include "math.h"
 
 
 void bresenhamSmallSlope(uint x1, uint y1, uint x2, uint y2, Color color);
@@ -362,7 +363,7 @@ uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float y
 inline bool isInside(uint code1, uint code2) {return !(code1 | code2);}
 inline bool isOutside(uint code1, uint code2) {return (code1 & code2);}
 
-void lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color, LineMethod method)
+void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color, LineMethod method)
 {
     float boundaryOffset = 0.0000001f;
 
