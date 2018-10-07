@@ -333,3 +333,105 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
     }
 }
 
+
+
+
+enum ClipWindowCode
+{
+    INSIDE  = 0,
+    LEFT    = 1 << 0,
+    RIGHT   = 1 << 1,
+    BOTTOM  = 1 << 2,
+    TOP     = 1 << 3
+};
+
+
+uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float ymax)
+{
+    uint coding =  0;
+
+    if(x < xmin) coding |= LEFT;
+    else if(x > xmax) coding |= RIGHT;
+    if(y < ymin) coding |= BOTTOM;
+    else if(y > ymax) coding |= TOP;
+
+    return coding;
+}
+
+
+inline bool isInside(uint code1, uint code2) {return !(code1 | code2);}
+inline bool isOutside(uint code1, uint code2) {return (code1 & code2);}
+
+std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax)
+{
+    std::vector<Vertex> clippedVertices{};
+
+    for(uint i = 0, size = uint(vertices.size()); i < size; ++i)
+    {
+        Vertex v1 = vertices[i];
+        Vertex v2 = i == (size - 1) ? vertices[0] : vertices[i + 1];
+
+        uint code1 = computeCoding(v1.x, v1.y, xmin, xmax, ymin, ymax);
+        uint code2 = computeCoding(v2.x, v2.y, xmin, xmax, ymin, ymax);
+
+        while(true)
+        {
+            if(isInside(code1, code2))
+            {
+                clippedVertices.push_back(v1);
+                clippedVertices.push_back(v2);
+                break;
+            }
+            
+            else if(isOutside(code1, code2))
+                break;
+
+            else    // partially inside clipping window
+            {
+                uint outsideCoding = code1 ? code1 : code2;
+                float x = 0.0f, y = 0.0f;
+
+                if(outsideCoding & LEFT)
+                {
+                    y = v1.y + (v2.y - v1.y) * (xmin - v1.x) / (v2.x - v1.x);
+                    x = xmin;
+                }
+
+                else if(outsideCoding & RIGHT)
+                {
+                    y = v1.y + (v2.y - v1.y) * (xmax - v1.x) / (v2.x - v1.x);
+                    x = xmax;
+                }
+
+                else if(outsideCoding & BOTTOM)
+                {
+                    x = v1.x + (v2.x - v1.x) * (ymin - v1.y) / (v2.y - v1.y);
+                    y = ymin;
+                }
+
+                else if(outsideCoding & TOP)
+                {
+                    x = v1.x + (v2.x - v1.x) + (ymax - v1.y) * (v2.y - v1.y);
+                    y = ymax;
+                }
+
+                if(code1 == outsideCoding)
+                {
+                    v1.x = x;
+                    v1.y = y;
+                    code1 = computeCoding(v1.x, v1.y, xmin, xmax, ymin, ymax);
+                }
+
+                else
+                {
+                    v2.x = x;
+                    v2.y = y;
+                    code2 = computeCoding(v2.x, v2.y, xmin, xmax, ymin, ymax);
+
+                }
+            }
+        }
+    }
+
+    return clippedVertices;
+}

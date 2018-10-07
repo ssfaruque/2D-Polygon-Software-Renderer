@@ -42,4 +42,14 @@ void bresenham(float x1, float y1, float x2, float y2, Color color);
 void polygonFill(const std::vector<Vertex>& vertices, Color color);
 
 
+
+
+/*
+ * Implementation of Cohen Sutherland line clipping algorithm
+ */
+std::vector<Vertex> lineClipCohenSutherland(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax);
+
+
+
+
 #endif  // GRAPHICS_H
