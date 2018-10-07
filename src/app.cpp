@@ -160,11 +160,11 @@ void renderScene()
     // vertices.push_back(v9);
 
 
-    Matrix4 matrix;
-    
-    matrix = matrix + 7;
+    Matrix2 matrix1(5);
+    Matrix2 matrix2(7);
+    Matrix2 result = matrix1 - matrix2;
 
-
+    std::cout << result << std::endl;
 
 
     Vertex v1(1.5f, 0.0f);
