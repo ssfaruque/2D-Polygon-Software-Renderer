@@ -13,7 +13,11 @@
 #include "frameBuffer.h"
 #include "types.h"
 #include "graphics.h"
+#include "primitive.h"
+
+
 #include "math.h"
+
 
 
 void renderScene();
@@ -48,8 +52,6 @@ void App::run()
 
 void renderScene()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-
     Window* window = Window::getInstance();
     window->clear();
 
@@ -61,13 +63,6 @@ void renderScene()
     // Vertex v4(0.0f, -0.2f);
     // Vertex v5(-0.5f, -0.5f);
     // Vertex v6(-0.5f, 0.5f);
-
-    // bresenham(v1.x, v1.y, v2.x, v2.y, 0xff0000ff);
-    // bresenham(v2.x, v2.y, v3.x, v3.y, 0xff0000ff);
-    // bresenham(v3.x, v3.y, v4.x, v4.y, 0xff0000ff);
-    // bresenham(v4.x, v4.y, v5.x, v5.y, 0xff0000ff);
-    // bresenham(v5.x, v5.y, v6.x, v6.y, 0xff0000ff);
-    // bresenham(v6.x, v6.y, v1.x, v1.y, 0xff0000ff);
 
     // vertices.push_back(v1);
     // vertices.push_back(v2);
@@ -87,13 +82,6 @@ void renderScene()
     // Vertex v5(-0.1f, 0.0f);
     // Vertex v6(-0.2f, 0.2f);
 
-    // bresenham(v1.x, v1.y, v2.x, v2.y, 0xff0000ff);
-    // bresenham(v2.x, v2.y, v3.x, v3.y, 0xff0000ff);
-    // bresenham(v3.x, v3.y, v4.x, v4.y, 0xff0000ff);
-    // bresenham(v4.x, v4.y, v5.x, v5.y, 0xff0000ff);
-    // bresenham(v5.x, v5.y, v6.x, v6.y, 0xff0000ff);
-    // bresenham(v6.x, v6.y, v1.x, v1.y, 0xff0000ff);
-
     // vertices.push_back(v1);
     // vertices.push_back(v2);
     // vertices.push_back(v3);
@@ -108,10 +96,7 @@ void renderScene()
     // Vertex v1(-0.2f, 0.4f);
     // Vertex v2(0.6f, -0.2f);
     // Vertex v3(-0.1f, -0.1f);
- 
-    // bresenham(v1.x, v1.y, v2.x, v2.y, 0xff0000ff);
-    // bresenham(v2.x, v2.y, v3.x, v3.y, 0xff0000ff);
-    // bresenham(v3.x, v3.y, v1.x, v1.y, 0xff0000ff);
+
 
     // vertices.push_back(v1);
     // vertices.push_back(v2);
@@ -124,11 +109,7 @@ void renderScene()
     // Vertex v2(0.5f, 0.5f);
     // Vertex v3(0.5f, -0.5f);
     // Vertex v4(-0.5f, -0.5f);
- 
-    // bresenham(v1.x, v1.y, v2.x, v2.y, 0xff0000ff);
-    // bresenham(v2.x, v2.y, v3.x, v3.y, 0xff0000ff);
-    // bresenham(v3.x, v3.y, v4.x, v4.y, 0xff0000ff);
-    // bresenham(v4.x, v4.y, v1.x, v1.y, 0xff0000ff);
+
 
     // vertices.push_back(v1);
     // vertices.push_back(v2);
@@ -159,33 +140,18 @@ void renderScene()
     vertices.push_back(v8);
     vertices.push_back(v9);
 
-    bresenham(v1.x, v1.y, v2.x, v2.y, 0xffffffff);
-    bresenham(v2.x, v2.y, v3.x, v3.y, 0xffffffff);
-    bresenham(v3.x, v3.y, v4.x, v4.y, 0xffffffff);
-    bresenham(v4.x, v4.y, v5.x, v5.y, 0xffffffff);
-    bresenham(v5.x, v5.y, v6.x, v6.y, 0xffffffff);
-    bresenham(v6.x, v6.y, v7.x, v7.y, 0xffffffff);
-    bresenham(v7.x, v7.y, v8.x, v8.y, 0xffffffff);
-    bresenham(v8.x, v8.y, v9.x, v9.y, 0xffffffff);
-    bresenham(v9.x, v9.y, v1.x, v1.y, 0xffffffff);
 
-
- 
-    // Vertex v1(1.5f, 0.0f);
-    // Vertex v2(0.0f, -1.6f);
-    // Vertex v3(-1.4f, 0.2f);
-    // Vertex v4(0.1f, 1.1f);
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-    // vertices.push_back(v4);
 
     // cohenSutherlandClipping(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
 
-    for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
+    //for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
 
-    polygonFill(vertices, 0x330000ff);
+
+    Polygon polygon(vertices, 0x00FF00FF, true, true);
+    polygon.draw();
+
+
+    //polygonFill(vertices, 0x330000ff);
 
     showScreen();
 }

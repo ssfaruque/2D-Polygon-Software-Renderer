@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <cstdint>
+#include <vector>
 
 using uint = unsigned int;
 
@@ -60,6 +61,9 @@ struct Edge
     yMax(pyMax), yMin(pyMin), startingX(pstartingX), slopeInv(pslopeInv)
     {}
 };
+
+
+
 
 
 #endif  // TYPES_H

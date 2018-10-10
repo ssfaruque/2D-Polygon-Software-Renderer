@@ -3,6 +3,14 @@
 
 
 
+class Scene
+{
+    private:
+
+    public:
+
+};
+
 
 
 

@@ -48,23 +48,10 @@ void drawPixel(float x, float y, Color color, bool normalized)
 }
 
 
-void drawLine(uint x1, uint y1, uint x2, uint y2, Color color)
+void drawLine(uint x1, uint y1, uint x2, uint y2, Color color, bool drawWithBresenham)
 {
-    int deltaX = x2 - x1;
-    int deltaY = y2 - y1;
-    int numSteps = absVal(deltaX) > absVal(deltaY) ? absVal(deltaX) : absVal(deltaY);
-    float xStep = (float)(deltaX) / (float)(numSteps);
-    float yStep = (float)(deltaY) / (float)(numSteps);
-    float roundTerm = 0.5f;
-    float x = x1;
-    float y = y1;
-
-    for (int step = 0; step < numSteps; ++step)
-    {
-        drawPixel((uint)(x + roundTerm), (uint)(y + roundTerm), color);
-        x += xStep;
-        y += yStep;
-    }
+    if(drawWithBresenham)   bresenham(x1, y1, x2, y2, color);
+    else                    dda(x1, y1, x2, y2, color);
 }
 
 
@@ -74,8 +61,8 @@ void drawLine(uint x1, uint y1, uint x2, uint y2, Color color)
 
 void dda(float x1, float y1, float x2, float y2, Color color)
 {
-    normalToScreenCoords(&x1, &y1);
-    normalToScreenCoords(&x2, &y2);
+    //normalToScreenCoords(&x1, &y1);
+    //normalToScreenCoords(&x2, &y2);
 
     int deltaX = x2 - x1;
     int deltaY = y2 - y1;
@@ -99,14 +86,10 @@ void dda(float x1, float y1, float x2, float y2, Color color)
 
 
 
-
-
-
-
 void bresenham(float x1, float y1, float x2, float y2, Color color)
 {
-    normalToScreenCoords(&x1, &y1);
-    normalToScreenCoords(&x2, &y2);
+    //normalToScreenCoords(&x1, &y1);
+    //normalToScreenCoords(&x2, &y2);
 
     int absDeltaX = absVal(x2 - x1);
     int absDeltaY = absVal(y2 - y1);
@@ -315,11 +298,11 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
                   activeEdgeList.end(),
                   [](const Edge& e1, const Edge& e2){return uint(e1.startingX) < uint(e2.startingX);});
 
-        if(activeEdgeList.size() > 1)
+        if(activeEdgeList.size() > 1 && scanLine != yMin)
         {
             for(int i = 0; i < (int)activeEdgeList.size(); i += 2)
             {
-                for(uint x1 = activeEdgeList[i].startingX,
+                for(uint x1 = activeEdgeList[i].startingX + 1,
                     x2 = activeEdgeList[i + 1].startingX;
                     x1 < x2;
                      ++x1)

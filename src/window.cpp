@@ -67,5 +67,6 @@ void Window::destroy()
 
 void Window::clear(Color color)
 {
+    glClear(GL_COLOR_BUFFER_BIT);
     m_frameBuffer->clear(color);
 }

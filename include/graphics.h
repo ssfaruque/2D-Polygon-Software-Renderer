@@ -28,7 +28,7 @@ void drawPixel(float x, float y, Color color, bool normalized = true);
 /*
  * Draws a line to the frame buffer given starting and ending coordinates
  */
-void drawLine(uint x1, uint y1, uint x2, uint y2, Color color);
+void drawLine(uint x1, uint y1, uint x2, uint y2, Color color, bool drawWithBresenham);
 
 
 /*
