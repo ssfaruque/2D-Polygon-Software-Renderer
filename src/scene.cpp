@@ -60,7 +60,24 @@ void Scene::load(std::string loadFileName)
 
     if(inf.is_open())
     {
+        std::cout << "Opened file!" << std::endl;
 
+        std::getline(inf, line);
+        //int numPolygons = std::stoi(line);
+        inf.ignore();
+
+        while(!inf.eof())
+        {
+            while(std::getline(inf, line))
+            {
+                float x, y;
+                iss << line;
+                iss >> x >> y;
+                iss.clear();
+
+                std::cout << "x: " << x << " y: " << y << std::endl;
+            }
+        }
     }
 }
 

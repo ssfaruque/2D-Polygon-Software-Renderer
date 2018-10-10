@@ -94,14 +94,14 @@ void renderScene()
 
 
     Scene scene;
+    scene.load("../input/sample.txt");
 
-    Polygon polygon(vertices, 0x00FF00FF, true, true);
+    //Polygon polygon(vertices, 0x00FF00FF, true, true);
     
-    scene.addEntity(&polygon);
-    scene.addEntity(&line);
-
-    scene.displayEntities();
-    scene.draw();
+    //scene.addEntity(&polygon);
+    //scene.addEntity(&line);
+    //scene.displayEntities();
+    //scene.draw();
 
 
 
