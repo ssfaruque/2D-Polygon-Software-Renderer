@@ -14,6 +14,7 @@
 #include "types.h"
 #include "graphics.h"
 #include "primitive.h"
+#include "scene.h"
 
 
 #include "math.h"
@@ -57,67 +58,7 @@ void renderScene()
 
     std::vector<Vertex> vertices;
 
-    // Vertex v1(0.0f, 0.2f);
-    // Vertex v2(0.5f, 0.5f);
-    // Vertex v3(0.5f, -0.5f);
-    // Vertex v4(0.0f, -0.2f);
-    // Vertex v5(-0.5f, -0.5f);
-    // Vertex v6(-0.5f, 0.5f);
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-    // vertices.push_back(v4);
-    // vertices.push_back(v5);
-    // vertices.push_back(v6);
-
-
-
-    // OTHER SHAPE
-
-    // Vertex v1(0.2f, 0.2f);
-    // Vertex v2(0.1f, 0.0f);
-    // Vertex v3(0.2f, -0.2f);
-    // Vertex v4(-0.2f, -0.2f);
-    // Vertex v5(-0.1f, 0.0f);
-    // Vertex v6(-0.2f, 0.2f);
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-    // vertices.push_back(v4);
-    // vertices.push_back(v5);
-    // vertices.push_back(v6);
-
-
-
-    // TRIANGLE
-
-    // Vertex v1(-0.2f, 0.4f);
-    // Vertex v2(0.6f, -0.2f);
-    // Vertex v3(-0.1f, -0.1f);
-
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-
-
-    // SQUARE
-
-    // Vertex v1(-0.5f, 0.5f);
-    // Vertex v2(0.5f, 0.5f);
-    // Vertex v3(0.5f, -0.5f);
-    // Vertex v4(-0.5f, -0.5f);
-
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-    // vertices.push_back(v4);
-
-
-
+  
     // EXTREME SHAPE
 
     Vertex v1(-0.15f, 0.35f);
@@ -146,9 +87,22 @@ void renderScene()
 
     //for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
 
+    Vertex linev1(-0.8f, 0.6f);
+    Vertex linev2(-0.8f, -0.6f);
+
+    Line line(linev1, linev2, 0xff0000ff, true);
+
+
+    Scene scene;
 
     Polygon polygon(vertices, 0x00FF00FF, true, true);
-    polygon.draw();
+    
+    scene.addEntity(&polygon);
+    scene.addEntity(&line);
+
+    scene.displayEntities();
+    scene.draw();
+
 
 
     //polygonFill(vertices, 0x330000ff);

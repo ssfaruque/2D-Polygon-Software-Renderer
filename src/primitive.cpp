@@ -1,3 +1,5 @@
+#include <iomanip>
+
 #include "primitive.h"
 #include "graphics.h"
 
@@ -49,3 +51,23 @@ void Polygon::draw()
         polygonFill(vertices, m_color);
     }
 }
+
+
+void Line::printDescription() const
+{
+    std::cout << "ID: " << std::setw(10) << std::left << m_id 
+              << " type: " << std::setw(10) << "Line "
+              << " vertices: " 
+              << "(" << m_v1.x << ", " << m_v1.y << ") "
+              << "(" << m_v2.x << ", " << m_v2.y << ") " << std::endl;;
+}
+
+
+void Polygon::printDescription() const
+{
+    std::cout << "ID: " << std::setw(10) << std::left << m_id 
+              << " type: " << std::setw(10) << "Polygon "
+              << "numSides: " << getNumSides() << std::endl;
+}
+
+

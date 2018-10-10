@@ -269,7 +269,7 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
 {
     // supposed to add only non horizontal edges to table
     std::vector<Edge> edges = createEdges(vertices);
-    printEdges(edges);
+    //printEdges(edges);
     std::vector<std::vector<Edge>> edgeList = createEdgeList(edges);
 
     int yMin = edges[0].yMin, yMax = edges[0].yMax;

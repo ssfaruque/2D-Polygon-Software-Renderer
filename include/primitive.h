@@ -1,6 +1,7 @@
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
 
+#include <iostream>
 #include <vector>
 
 #include "entity.h"
@@ -22,6 +23,8 @@ class Line : public Entity
 
         void draw() override;
 
+        void printDescription() const override;
+
 };
 
 
@@ -41,7 +44,10 @@ class Polygon : public Entity
         }
         
         void draw() override;
-        inline uint getNumSides() const {return uint(m_vertices.size() - 1);}
+        inline uint getNumSides() const {return uint(m_vertices.size());}
+
+        void printDescription() const override;
+
 };
 
 

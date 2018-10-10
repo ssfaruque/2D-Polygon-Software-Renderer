@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <iostream>
 
 #include "types.h"
 
@@ -13,6 +14,7 @@ class Entity
 
     public:
         virtual void draw() = 0;
+        virtual void printDescription() const = 0;
         void setColor(Color color)
         {m_color = color;}
 
