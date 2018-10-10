@@ -139,49 +139,53 @@ void renderScene()
 
     // EXTREME SHAPE
 
-    // Vertex v1(-0.15f, 0.35f);
-    // Vertex v2(0.0f, 0.35f);
-    // Vertex v3(0.2f, 0.0f);
-    // Vertex v4(0.0f, -0.25f);
-    // Vertex v5(-0.15f, -0.05f);
-    // Vertex v6(0.05f, -0.1);
-    // Vertex v7(-0.15f, 0.2f);
-    // Vertex v8(-0.5f, -0.3);
-    // Vertex v9(-0.3f, 0.4);
-
-    // vertices.push_back(v1);
-    // vertices.push_back(v2);
-    // vertices.push_back(v3);
-    // vertices.push_back(v4);
-    // vertices.push_back(v5);
-    // vertices.push_back(v6);
-    // vertices.push_back(v7);
-    // vertices.push_back(v8);
-    // vertices.push_back(v9);
-
-
-    Matrix2 matrix1(5);
-    Matrix2 matrix2(7);
-    Matrix2 result = matrix1 - matrix2;
-
-    std::cout << result << std::endl;
-
-
-    Vertex v1(1.5f, 0.0f);
-    Vertex v2(0.0f, -1.6f);
-    Vertex v3(-1.4f, 0.2f);
-    Vertex v4(0.1f, 1.1f);
+    Vertex v1(-0.15f, 0.35f);
+    Vertex v2(0.0f, 0.35f);
+    Vertex v3(0.2f, 0.0f);
+    Vertex v4(0.0f, -0.25f);
+    Vertex v5(-0.15f, -0.05f);
+    Vertex v6(0.05f, -0.1);
+    Vertex v7(-0.15f, 0.2f);
+    Vertex v8(-0.5f, -0.3);
+    Vertex v9(-0.3f, 0.4);
 
     vertices.push_back(v1);
     vertices.push_back(v2);
     vertices.push_back(v3);
     vertices.push_back(v4);
+    vertices.push_back(v5);
+    vertices.push_back(v6);
+    vertices.push_back(v7);
+    vertices.push_back(v8);
+    vertices.push_back(v9);
 
-    cohenSutherlandClipping(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
+    bresenham(v1.x, v1.y, v2.x, v2.y, 0xffffffff);
+    bresenham(v2.x, v2.y, v3.x, v3.y, 0xffffffff);
+    bresenham(v3.x, v3.y, v4.x, v4.y, 0xffffffff);
+    bresenham(v4.x, v4.y, v5.x, v5.y, 0xffffffff);
+    bresenham(v5.x, v5.y, v6.x, v6.y, 0xffffffff);
+    bresenham(v6.x, v6.y, v7.x, v7.y, 0xffffffff);
+    bresenham(v7.x, v7.y, v8.x, v8.y, 0xffffffff);
+    bresenham(v8.x, v8.y, v9.x, v9.y, 0xffffffff);
+    bresenham(v9.x, v9.y, v1.x, v1.y, 0xffffffff);
 
-    //for(auto& v : clippedVertices) {normalToScreenCoords(&v.x, &v.y);}
 
-    //polygonFill(clippedVertices, 0xffffffff);
+ 
+    // Vertex v1(1.5f, 0.0f);
+    // Vertex v2(0.0f, -1.6f);
+    // Vertex v3(-1.4f, 0.2f);
+    // Vertex v4(0.1f, 1.1f);
+
+    // vertices.push_back(v1);
+    // vertices.push_back(v2);
+    // vertices.push_back(v3);
+    // vertices.push_back(v4);
+
+    // cohenSutherlandClipping(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
+
+    for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
+
+    polygonFill(vertices, 0x330000ff);
 
     showScreen();
 }
