@@ -87,12 +87,6 @@ void renderScene()
 
     //for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
 
-    Vertex linev1(-0.8f, 0.6f);
-    Vertex linev2(-0.8f, -0.6f);
-
-    Line line(linev1, linev2, 0xff0000ff, true);
-
-
     Scene scene;
     scene.load("input/sample.txt");
     scene.displayEntities();
