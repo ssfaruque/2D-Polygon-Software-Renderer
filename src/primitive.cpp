@@ -5,7 +5,8 @@
 
 void Line::draw()
 {
-    float x1 = m_v1.x, y1 = m_v1.y, x2 = m_v2.x, y2 = m_v2.y;
+    float x1 = m_vertices[0].x, y1 = m_vertices[0].y,
+          x2 = m_vertices[1].x, y2 = m_vertices[1].y;
     normalToScreenCoords(&x1, &y1);
     normalToScreenCoords(&x2, &y2);
     drawLine(x1, y1, x2, y2, m_color, m_drawWithBresenham);
@@ -53,13 +54,15 @@ void Polygon::draw()
 }
 
 
+
+
 void Line::printDescription() const
 {
     std::cout << "ID: " << std::setw(10) << std::left << m_id 
               << " type: " << std::setw(10) << "Line "
               << " vertices: " 
-              << "(" << m_v1.x << ", " << m_v1.y << ") "
-              << "(" << m_v2.x << ", " << m_v2.y << ") " << std::endl;;
+              << "(" << m_vertices[0].x << ", " << m_vertices[0].y << ") "
+              << "(" << m_vertices[1].x << ", " << m_vertices[1].y << ") " << std::endl;;
 }
 
 

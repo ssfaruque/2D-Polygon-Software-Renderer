@@ -94,7 +94,11 @@ void renderScene()
 
 
     Scene scene;
-    scene.load("../input/sample.txt");
+    scene.load("input/sample.txt");
+    scene.displayEntities();
+    scene.draw();
+
+    scene.save("input/output_sameple.txt");
 
     //Polygon polygon(vertices, 0x00FF00FF, true, true);
     
@@ -102,8 +106,6 @@ void renderScene()
     //scene.addEntity(&line);
     //scene.displayEntities();
     //scene.draw();
-
-
 
     //polygonFill(vertices, 0x330000ff);
 
