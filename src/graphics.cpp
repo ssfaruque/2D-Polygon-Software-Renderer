@@ -425,3 +425,31 @@ void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, fl
         }
     }
 }
+
+
+
+Vertex intersectPoint(const Vertex& p1, const Vertex& p2,
+                      const Vertex& p3, const Vertex& p4)
+{
+    Vertex intersection;
+
+    float xCoordNumerator = (p1.x * p2.y - p1.y * p2.x) * (p3.x - p4.x) - (p1.x - p2.x) * (p3.x * p4.y - p3.y * p4.x); 
+    float yCoordNumerator = (p1.x * p2.y - p1.y * p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x * p4.y - p3.y * p4.x); 
+    float denominator     = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
+
+    intersection.x = xCoordNumerator / denominator;
+    intersection.y = yCoordNumerator / denominator;
+
+    return intersection;
+}
+
+
+void sutherlandHodgmanClipping(const std::vector<Vertex>& vertices, std::vector<Vertex> clippingWindow, Color color, LineMethod method)
+{
+    std::vector<Vertex> clippedVertices{};
+
+    for(uint i = 0, size = uint(clippingWindow.size()); i < size; ++i)
+    {
+
+    }
+}
