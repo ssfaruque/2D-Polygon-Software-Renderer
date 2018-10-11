@@ -49,5 +49,14 @@ void Entity::scale(const Vector2f& vector)
 
 void Entity::rotate(float angle)
 {
+    Vertex centroid = calcCentroid();
+    angle = toRadians(angle);
+    Matrix3f rotateMatrix = create2DRotateMatrix(centroid, angle);
 
+    for(auto& vertex : m_vertices)
+    {
+        Vector3f vertexVecCast = Vector3f(vertex.x, vertex.y, 1.0f);
+        Vector3f newPosition = rotateMatrix * vertexVecCast;   
+        vertex = Vertex(newPosition.x, newPosition.y);                  
+    }
 }

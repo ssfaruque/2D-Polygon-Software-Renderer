@@ -103,11 +103,11 @@ void renderScene()
 
     
     Entity* entity = new Polygon;
-    entity->addVertex(Vertex(-0.4f, 0.3f));
-    entity->addVertex(Vertex(0.3f,-0.1f));
-    entity->addVertex(Vertex(-0.3f,-0.2f));
+    entity->addVertex(Vertex(0.0f, 0.0f));
+    entity->addVertex(Vertex(0.5f, 0.0f));
+    entity->addVertex(Vertex(0.0f, 0.5f));
     entity->draw();
-    entity->scale(Vector2f(2.0f, 1.0f));
+    entity->rotate(450.0f);
     entity->draw();
 
 
