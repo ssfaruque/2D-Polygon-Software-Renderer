@@ -37,6 +37,8 @@ struct Color
 };
 
 
+
+
 struct Vertex
 {
     float x;

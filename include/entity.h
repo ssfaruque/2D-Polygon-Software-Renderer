@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "types.h"
-
+#include "math.h"
 
 static uint nextIDNum = 0;
 
@@ -15,6 +15,10 @@ class Entity
         uint m_id;
         Color m_color;
         std::vector<Vertex> m_vertices;
+
+    protected:
+        Vertex calcCentroid() const;
+
 
     public:
         virtual void draw() = 0;
@@ -26,9 +30,18 @@ class Entity
         m_id(nextIDNum++), m_color(0xFFFFFFFF), m_vertices({})
         {}
 
+        virtual ~Entity() = default;
+
         inline uint getId() const {return m_id;}
         inline void addVertex(const Vertex& vertex) {m_vertices.push_back(vertex);};
         inline uint getNumVertices() const {return uint(m_vertices.size());}
+
+        
+        void translate(const Vector2f& vector);
+        void scale(const Vector3f& vector);
+        void rotate(float angle);
+
+
 
         friend class Scene;
 };

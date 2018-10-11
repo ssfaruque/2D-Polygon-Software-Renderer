@@ -2,12 +2,14 @@
 #define APP_H
 
 class Window;
+class Scene;
 
 class App
 {
     private:
         bool m_running;
         Window* m_window;
+        Scene* m_scene;
 
     public:
         App(const char* title, const int width, const int height,

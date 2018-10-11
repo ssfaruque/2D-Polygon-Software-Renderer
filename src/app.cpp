@@ -15,9 +15,8 @@
 #include "graphics.h"
 #include "primitive.h"
 #include "scene.h"
-
-
 #include "math.h"
+#include "cli.h"
 
 
 
@@ -31,6 +30,8 @@ m_running(true)
 {
     Window::create(width, height, title, argc, argv);
     m_window = Window::getInstance();
+
+    m_scene = new Scene("input/sample.txt");
 }
 
 
@@ -38,15 +39,20 @@ App::~App()
 {
     if(m_window)
         Window::destroy();
+
+    if(m_scene)
+    {
+        m_scene->save("input/sample.txt");
+        delete m_scene;
+    }
 }
 
 
 void App::run()
 {
     std::cout << "Loading scene..." << std::endl;
-
     glutDisplayFunc(renderScene);
-    glutIdleFunc(renderScene);
+    //glutIdleFunc(renderScene);
     glutMainLoop();
 }
 
@@ -58,7 +64,6 @@ void renderScene()
 
     std::vector<Vertex> vertices;
 
-  
     // EXTREME SHAPE
 
     Vertex v1(-0.15f, 0.35f);
@@ -82,28 +87,31 @@ void renderScene()
     vertices.push_back(v9);
 
 
+    // Scene scene;
+    // scene.load("input/sample.txt");
+    // scene.displayEntities();
+    // scene.draw();
+    // scene.save("input/output_sameple.txt");
 
-    // cohenSutherlandClipping(vertices, -1.0f, 1.0f, -1.0f, 1.0f, 0x00ff00ff, BRESENHAM);
+    // Matrix3f translationMatrix = createTranslationMatrix3f(Vector2f(0.0f, 0.1f));
 
-    //for(auto& v : vertices) {normalToScreenCoords(&v.x, &v.y);}
+    // Vector3f vertex(-0.4f, 0.0f, 1.0f);
 
-    Scene scene;
-    scene.load("input/sample.txt");
-    scene.displayEntities();
-    scene.draw();
+    // Vector3f newPosition = translationMatrix * vertex;
 
-    scene.save("input/output_sameple.txt");
+    // std::cout << "(" << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << ")" << std::endl;    
 
-    //Polygon polygon(vertices, 0x00FF00FF, true, true);
     
-    //scene.addEntity(&polygon);
-    //scene.addEntity(&line);
-    //scene.displayEntities();
-    //scene.draw();
+    Entity* entity = new Line;
+    entity->addVertex(Vertex(-0.4f, 0.3f));
+    entity->addVertex(Vertex(0.3f,-0.1f));
+    entity->draw();
+    entity->translate(Vector2f(0.3f, -0.5f));
+    entity->draw();
 
-    //polygonFill(vertices, 0x330000ff);
 
     showScreen();
+    glutPostRedisplay();
 }
 
 

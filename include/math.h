@@ -1,166 +1,46 @@
 #ifndef MATH_H
 #define MATH_H
 
-#include <iomanip>
+#include <glm/glm.hpp>
+
+struct Vertex;
+
+using Vector2f = glm::vec2;
+using Vector3f = glm::vec3;
+using Vector4f = glm::vec4;
+
+using Matrix2f = glm::mat2;
+using Matrix3f = glm::mat3;
+using Matrix4f = glm::mat4;
 
 
-template<typename T, int N>
-struct Matrix;
+#define dotProduct glm::dot
+#define crossProduct glm::cross
 
-template<typename T, int N>
-struct Vector;
+#define sin glm::sin
+#define cos glm::cos
+#define tan glm::tan
 
-
-template<typename T, int N>
-struct Matrix
-{
-    T data[N][N];
-
-    friend Matrix<T, N> operator+(const Matrix<T, N>& left, const Matrix<T, N>& right)
-    {
-        Matrix<T, N> result;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-                result.data[i][j] = left.data[i][j] + right.data[i][j];
-        }
-
-        return result;
-    }
+#define transpose glm::transpose
 
 
-    friend Matrix<T, N> operator+(const Matrix<T, N>& matrix, const T& other)
-    {
-        Matrix<T, N> result;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-                result.data[i][j] = matrix.data[i][j] + other;
-        }
-
-        return result;
-    }
+inline float toRadians(float angle) {return glm::radians(angle);}
 
 
-    friend Matrix<T, N> operator-(const Matrix<T, N>& left, const Matrix<T, N>& right)
-    {
-        Matrix<T, N> result;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-                result.data[i][j] = left.data[i][j] - right.data[i][j];
-        }
-
-        return result;
-    }
-
-    friend Matrix<T, N> operator-(const Matrix<T, N>& matrix, const T& other)
-    {
-        Matrix<T, N> result;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-                result.data[i][j] = matrix.data[i][j] - other;
-        }
-
-        return result;
-    }
+Matrix3f createTranslationMatrix3f(const Vector2f& vector);
+Matrix4f createTranslationMatrix4f(const Vector3f& vector);
 
 
-    friend Matrix<T, N> operator*(const Matrix<T, N>& left, const Matrix<T, N>& right)
-    {
-        Matrix<T, N> result;
+Matrix3f createScaleMatrix3f(const Vector2f& vector);
+Matrix4f createScaleMatrix4f(const Vector3f& vector);
 
 
-        return result;
-    }
+Matrix3f create2DRotateMatrix(const Vertex& centroid, float angle);
 
+Matrix4f createRotateXMatrix4f(float angle);
+Matrix4f createRotateYMatrix4f(float angle);
+Matrix4f createRotateZMatrix4f(float angle);
 
-    friend Vector<T, N> operator*(const Matrix<T, N>& matrix, const Vector<T, N>& vec)
-    {
-        Vector<T, N> result;
-
-
-        return result;
-    }
-
-
-    friend Matrix<T, N> operator*(const Matrix<T, N>& matrix, const T& other)
-    {
-        Matrix<T, N> result;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-                result.data[i][j] = matrix.data[i][j] * other;
-        }
-
-        return result;
-    }
-
-
-    Matrix(T diagonalVal = 1)
-    {
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-            {
-                if(i == j)
-                    data[i][j] = diagonalVal;
-
-                else
-                    data[i][j] = 0;
-            }
-        }
-    }
-
-
-    friend std::ostream& operator<<(std::ostream& os, const Matrix<T, N>& matrix)
-    {
-        os << "---------------------------------------------" << std::endl;
-
-        for(int i = 0; i < N; ++i)
-        {
-            for(int j = 0; j < N; ++j)
-            {
-                os << std::left << std::setw(10) << matrix.data[i][j] << " ";
-            }
-
-            os << std::endl;
-        }
-
-        os << "---------------------------------------------" << std::endl;
-
-        return os;
-    }
-};
-
-
-template<typename T, int N>
-struct Vector
-{
-    T data[N];
-
-    Vector<T, N> operator+(const Vector<T, N>& other);
-    Vector<T, N> operator+(const T& other);
-    Vector<T, N> operator-(const Vector<T, N>& other);
-    Vector<T, N> operator-(const T& other);
-    Vector<T, N> operator*(const Vector<T, N>& other);
-    Vector<T, N> operator*(const T& other);
-};
-
-
-using Vector2 = Vector<float, 2>;
-using Vector3 = Vector<float, 3>;
-using Vector4 = Vector<float, 4>;
-
-using Matrix2 = Matrix<float, 2>;
-using Matrix3 = Matrix<float, 3>;
-using Matrix4 = Matrix<float, 4>;
 
 
 #endif  // MATH_H

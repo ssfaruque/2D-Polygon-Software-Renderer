@@ -70,7 +70,7 @@ void Polygon::printDescription() const
 {
     std::cout << "ID: " << std::setw(10) << std::left << m_id 
               << " type: " << std::setw(10) << "Polygon "
-              << "numSides: " << getNumSides() << std::endl;
+              << "numSides: " << getNumVertices() << std::endl;
 }
 
 
