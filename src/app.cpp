@@ -102,11 +102,12 @@ void renderScene()
     // std::cout << "(" << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << ")" << std::endl;    
 
     
-    Entity* entity = new Line;
+    Entity* entity = new Polygon;
     entity->addVertex(Vertex(-0.4f, 0.3f));
     entity->addVertex(Vertex(0.3f,-0.1f));
+    entity->addVertex(Vertex(-0.3f,-0.2f));
     entity->draw();
-    entity->translate(Vector2f(0.3f, -0.5f));
+    entity->scale(Vector2f(2.0f, 1.0f));
     entity->draw();
 
 

@@ -34,9 +34,16 @@ void Entity::translate(const Vector2f& vector)
 }
 
 
-void Entity::scale(const Vector3f& vector)
+void Entity::scale(const Vector2f& vector)
 {
+    Matrix3f scaleMatrix = createScaleMatrix3f(vector);
 
+    for(auto& vertex : m_vertices)
+    {
+        Vector3f vertexVecCast = Vector3f(vertex.x, vertex.y, 1.0f);
+        Vector3f newPosition = scaleMatrix * vertexVecCast;   
+        vertex = Vertex(newPosition.x, newPosition.y);                  
+    }
 }
 
 

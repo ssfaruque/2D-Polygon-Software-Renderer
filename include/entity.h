@@ -38,7 +38,7 @@ class Entity
 
         
         void translate(const Vector2f& vector);
-        void scale(const Vector3f& vector);
+        void scale(const Vector2f& vector);
         void rotate(float angle);
 
 
