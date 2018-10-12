@@ -6,10 +6,17 @@
 
 #include "entity.h"
 
+
 class Scene
 {
     private:
         std::vector<Entity*> m_entities;
+        std::vector<Vertex> m_clippingWindow;
+        float m_clipXmin;
+        float m_clipXmax;
+        float m_clipYmin;
+        float m_clipYmax;
+
 
     public:
         Scene();
@@ -22,6 +29,7 @@ class Scene
         void displayEntities() const;
         void load(std::string loadFileName);
         void save(std::string saveFileName) const;
+        void setClippingWindow(float clipXmin, float clipXmax, float clipYmin, float clipYmax);
 
 };
 

@@ -101,14 +101,27 @@ void renderScene()
 
     // std::cout << "(" << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << ")" << std::endl;    
 
-    
-    Entity* entity = new Polygon;
+    std::vector<Vertex> clippingWindow{};
+
+    Vertex clipV1(0.0f, 0.0f);
+    Vertex clipV2(0.5f, 0.0f);
+    Vertex clipV3(0.5f, 0.3f);
+    Vertex clipV4(0.0f, 0.3f);
+
+    clippingWindow.push_back(clipV1);
+    clippingWindow.push_back(clipV2);
+    clippingWindow.push_back(clipV3);
+    clippingWindow.push_back(clipV4);
+
+
+
+    Entity* entity = new Polygon({}, 0xFFFFFFFF, true, true);
     entity->addVertex(Vertex(0.0f, 0.0f));
     entity->addVertex(Vertex(0.5f, 0.0f));
     entity->addVertex(Vertex(0.0f, 0.5f));
-    entity->draw();
-    entity->rotate(450.0f);
-    entity->draw();
+    entity->draw(clippingWindow);
+
+
 
 
     showScreen();

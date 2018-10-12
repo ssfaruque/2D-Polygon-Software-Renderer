@@ -20,6 +20,13 @@ void normalToScreenCoords(float* x, float* y);
 
 
 /*
+ * Converts clipped coordinates
+ * into normalized device coordinates
+ */
+void clipToNormalCoords(float* x, float* y, float xmin, float xmax, float ymin, float ymax); 
+
+
+/*
  * Draws a single pixel to the frame buffer
  */
 void drawPixel(float x, float y, Color color, bool normalized = true);
@@ -59,7 +66,7 @@ void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, fl
 /*
  * Implementation of Sutherland-Hodgman line clipping algorithm
  */
-void sutherlandHodgmanClipping(const std::vector<Vertex>& vertices, std::vector<Vertex> clippingWindow, Color color = 0xFFFFFFFF, LineMethod method = BRESENHAM);
+std::vector<Vertex> sutherlandHodgmanClipping(const std::vector<Vertex>& vertices, const std::vector<Vertex>& clippingWindow);
 
 
 #endif  // GRAPHICS_H

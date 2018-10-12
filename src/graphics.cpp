@@ -31,6 +31,17 @@ void normalToScreenCoords(float* x, float* y)
 }
 
 
+void clipToNormalCoords(float* x, float* y, float xmin, float xmax, float ymin, float ymax) 
+{
+    float clipWidth  = xmax - xmin;
+    float clipHeight = ymax - ymin;
+
+    *x = 2 * ((*x - xmax) / clipWidth) + 1;
+    *y = 2 * ((*y - ymax) / clipHeight) + 1;
+} 
+
+
+
 void drawPixel(float x, float y, Color color, bool normalized)
 {
     Window *window = Window::getInstance();
@@ -322,7 +333,6 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
 
 enum ClipWindowCode
 {
-    INSIDE  = 0,
     LEFT    = 1 << 0,
     RIGHT   = 1 << 1,
     BOTTOM  = 1 << 2,
@@ -428,7 +438,7 @@ void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, fl
 
 
 
-Vertex intersectPoint(const Vertex& p1, const Vertex& p2,
+Vertex intersectionPoint(const Vertex& p1, const Vertex& p2,
                       const Vertex& p3, const Vertex& p4)
 {
     Vertex intersection;
@@ -444,12 +454,46 @@ Vertex intersectPoint(const Vertex& p1, const Vertex& p2,
 }
 
 
-void sutherlandHodgmanClipping(const std::vector<Vertex>& vertices, std::vector<Vertex> clippingWindow, Color color, LineMethod method)
+std::vector<Vertex> clipPointsWithWindow(const std::vector<Vertex>& vertices, const Vertex& clipV1, const Vertex& clipV2)
 {
     std::vector<Vertex> clippedVertices{};
 
-    for(uint i = 0, size = uint(clippingWindow.size()); i < size; ++i)
+    for(uint i = 0, size = uint(vertices.size()); i < size; ++i)
     {
+        uint j = (i == (size - 1)) ? 0 : (i + 1);
+        Vertex v1 = vertices[i];
+        Vertex v2 = vertices[j];
 
+        float p1 = (clipV2.x - clipV1.x) * (v1.y - clipV1.y) - (clipV2.y - clipV1.y) * (v1.x - clipV1.x);
+        float p2 = (clipV2.x - clipV1.x) * (v2.y - clipV1.y) - (clipV2.y - clipV1.y) * (v2.x - clipV1.x);
+
+
+        if(p1 < 0 && p2 < 0)
+            clippedVertices.push_back(v2);
+
+        else if(p1 >= 0 && p2 < 0)
+        {
+            clippedVertices.push_back(intersectionPoint(v1, v2, clipV1, clipV2));
+            clippedVertices.push_back(v2);
+        }
+
+        else if(p1 < 0 && p2 >= 0)
+            clippedVertices.push_back(intersectionPoint(v1, v2, clipV1, clipV2));      
     }
+
+    return clippedVertices;
+}
+
+
+std::vector<Vertex> sutherlandHodgmanClipping(const std::vector<Vertex>& vertices, const std::vector<Vertex>& clippingWindow)
+{
+    std::vector<Vertex> clippedVertices = vertices;
+
+    for(uint i = 0, size = uint(clippingWindow.size()); i < size; ++i)
+    {   
+        uint j = (i == (size - 1)) ? 0 : (i + 1);
+        clippedVertices = clipPointsWithWindow(clippedVertices, clippingWindow[i], clippingWindow[j]);
+    }
+
+    return clippedVertices;
 }

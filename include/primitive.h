@@ -24,7 +24,7 @@ class Line : public Entity
         m_drawWithBresenham(false)
         {}
 
-        void draw() override;
+        void draw(const std::vector<Vertex>& clippingWindow) override;
 
         void printDescription() const override;
 
@@ -49,7 +49,7 @@ class Polygon : public Entity
         m_drawWithBresenham(false), m_rasterized(false)
         {}
         
-        void draw() override;
+        void draw(const std::vector<Vertex>& clippingWindow) override;
 
         void printDescription() const override;
 

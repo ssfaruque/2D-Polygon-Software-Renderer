@@ -21,7 +21,7 @@ class Entity
 
 
     public:
-        virtual void draw() = 0;
+        virtual void draw(const std::vector<Vertex>& clippingWindow) = 0;
         virtual void printDescription() const = 0;
         void setColor(Color color)
         {m_color = color;}
