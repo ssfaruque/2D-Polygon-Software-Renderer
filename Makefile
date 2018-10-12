@@ -11,7 +11,7 @@ OS := $(shell uname -s)
 
 ifeq ($(OS), Linux)
     LIBS	:= -lGL -lglut
-	CPPFLAGS += -Werror
+	#CPPFLAGS += -Werror
 endif
 
 ifeq ($(OS), Darwin)

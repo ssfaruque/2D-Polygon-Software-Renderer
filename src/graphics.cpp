@@ -36,7 +36,7 @@ void clipToNormalCoords(float* x, float* y, float xmin, float xmax, float ymin, 
     float clipWidth  = xmax - xmin;
     float clipHeight = ymax - ymin;
 
-    *x = 2 * ((*x - xmax) / clipWidth) + 1;
+    *x = 2 * ((*x - xmax) / clipWidth)  + 1;
     *y = 2 * ((*y - ymax) / clipHeight) + 1;
 } 
 

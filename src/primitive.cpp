@@ -49,8 +49,19 @@ void Polygon::draw(const std::vector<Vertex>& clippingWindow)
             y2 = m_vertices[i + 1].y;
         }
 
+        float initialx1 = x1;
+        float initialy1 = y1;
+        float initialx2 = x2;
+        float initialy2 = y2;
+
         clipToNormalCoords(&x1, &y1, xmin, xmax, ymin, ymax);
         clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
+
+        float normalx1 = x1;
+        float normaly1 = y1;
+        float normalx2 = x2;
+        float normaly2 = y2;
+
 
         normalToScreenCoords(&x1, &y1);
         normalToScreenCoords(&x2, &y2);    
