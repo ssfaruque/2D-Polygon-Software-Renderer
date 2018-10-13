@@ -356,86 +356,66 @@ uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float y
 inline bool isInside(uint code1, uint code2) {return !(code1 | code2);}
 inline bool isOutside(uint code1, uint code2) {return (code1 & code2);}
 
-void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color, LineMethod method)
+void cohenSutherlandClipping(Vertex* v1, Vertex* v2, float xmin, float xmax, float ymin, float ymax)
 {
     float boundaryOffset = 0.0000001f;
 
-    for(uint i = 0, size = uint(vertices.size()); i < size; ++i)
+    uint code1 = computeCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
+    uint code2 = computeCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
+
+    while (true)
     {
-        Vertex v1 = vertices[i];
-        Vertex v2 = i == (size - 1) ? vertices[0] : vertices[i + 1];
+        if (isInside(code1, code2))
+            break;
 
-        uint code1 = computeCoding(v1.x, v1.y, xmin, xmax, ymin, ymax);
-        uint code2 = computeCoding(v2.x, v2.y, xmin, xmax, ymin, ymax);
-        bool drawLine = false;
+        else if (isOutside(code1, code2))
+            break;
 
-        while(true)
+        else // partially inside clipping window
         {
-            if(isInside(code1, code2))
+            uint outsideCoding = code1 ? code1 : code2;
+            float x = 0.0f, y = 0.0f;
+
+            if (outsideCoding & LEFT)
             {
-                drawLine = true;
-                break;
+                y = v1->y + (v2->y - v1->y) * (xmin - v1->x) / (v2->x - v1->x);
+                x = xmin + boundaryOffset;
             }
-            
-            else if(isOutside(code1, code2))
-                break;
 
-            else    // partially inside clipping window
+            else if (outsideCoding & RIGHT)
             {
-                uint outsideCoding = code1 ? code1 : code2;
-                float x = 0.0f, y = 0.0f;
-
-                if(outsideCoding & LEFT)
-                {
-                    y = v1.y + (v2.y - v1.y) * (xmin - v1.x) / (v2.x - v1.x);
-                    x = xmin + boundaryOffset;
-                }
-
-                else if(outsideCoding & RIGHT)
-                {
-                    y = v1.y + (v2.y - v1.y) * (xmax - v1.x) / (v2.x - v1.x);
-                    x = xmax - boundaryOffset;
-                }
-
-                else if(outsideCoding & BOTTOM)
-                {
-                    x = v1.x + (v2.x - v1.x) * (ymin - v1.y) / (v2.y - v1.y);
-                    y = ymin + boundaryOffset;
-                }
-
-                else if(outsideCoding & TOP)
-                {
-                    x = v1.x + (v2.x - v1.x) * (ymax - v1.y) / (v2.y - v1.y);
-                    y = ymax - boundaryOffset;
-                }
-
-                if(code1 == outsideCoding)
-                {
-                    v1.x = x;
-                    v1.y = y;
-                    code1 = computeCoding(v1.x, v1.y, xmin, xmax, ymin, ymax);
-                }
-
-                else
-                {
-                    v2.x = x;
-                    v2.y = y;
-                    code2 = computeCoding(v2.x, v2.y, xmin, xmax, ymin, ymax);
-
-                }
+                y = v1->y + (v2->y - v1->y) * (xmax - v1->x) / (v2->x - v1->x);
+                x = xmax - boundaryOffset;
             }
-        }
 
-        if(drawLine)
-        {
-            if(method == BRESENHAM)
-                bresenham(v1.x, v1.y, v2.x, v2.y, color);
-            else if(method == DDA)
-                dda(v1.x, v1.y, v2.x, v2.y, color);
+            else if (outsideCoding & BOTTOM)
+            {
+                x = v1->x + (v2->x - v1->x) * (ymin - v1->y) / (v2->y - v1->y);
+                y = ymin + boundaryOffset;
+            }
+
+            else if (outsideCoding & TOP)
+            {
+                x = v1->x + (v2->x - v1->x) * (ymax - v1->y) / (v2->y - v1->y);
+                y = ymax - boundaryOffset;
+            }
+
+            if (code1 == outsideCoding)
+            {
+                v1->x = x;
+                v1->y = y;
+                code1 = computeCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
+            }
+
+            else
+            {
+                v2->x = x;
+                v2->y = y;
+                code2 = computeCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
+            }
         }
     }
 }
-
 
 
 Vertex intersectionPoint(const Vertex& p1, const Vertex& p2,

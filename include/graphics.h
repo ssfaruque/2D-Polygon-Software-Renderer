@@ -59,7 +59,7 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color);
 /*
  * Implementation of Cohen-Sutherland line clipping algorithm
  */
-void cohenSutherlandClipping(const std::vector<Vertex>& vertices, float xmin, float xmax, float ymin, float ymax, Color color = 0xFFFFFFFF, LineMethod method = BRESENHAM);
+void cohenSutherlandClipping(Vertex* v1, Vertex* v2, float xmin, float xmax, float ymin, float ymax);
 
 
 

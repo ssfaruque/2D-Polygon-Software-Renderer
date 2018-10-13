@@ -74,7 +74,7 @@ App* App::getInstance()
 
 void App::run()
 {
-    std::cout << "Loading scene..." << std::endl;
+    std::cout << "Loading scene..." << std::endl << std::endl;
     glutDisplayFunc(renderScene);
     //glutIdleFunc(renderScene);
     glutMainLoop();
@@ -87,17 +87,8 @@ void renderScene()
     window->clear();
 
     App* app = App::getInstance();
-
-    app->m_scene->displayEntities();
-
     app->m_cli->processInput();
-
-
-
     app->m_scene->draw();
-    //app->m_scene->displayEntities();
-
-
 
     showScreen();
     glutPostRedisplay();

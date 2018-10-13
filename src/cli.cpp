@@ -134,6 +134,12 @@ void Cli::processInput()
     else if(command == "remove" && tokens.size() == 2)
         cmdRemove(std::stoi(tokens[1]));
 
+    else if(command == "help" && tokens.size() == 1)
+        cmdHelp();
+
+    else if(command == "displayEntities" && tokens.size() == 1)
+        cmdDisplayEntities();
+
     else if(command == "exit")
         exit(0);
     
@@ -227,9 +233,9 @@ void Cli::cmdBresenham(float x1, float y1, float x2, float y2, Color color)
 }
 
 
-void Cli::cmdPolygon(const std::vector<Vertex>& vertices, Color color, bool drawWithBresenham, bool rasterized)
+void Cli::cmdPolygon(const std::vector<Vertex>& vertices, Color color, bool drawWithBresenham, bool rasterize)
 {
-    Entity* entity = new Polygon(vertices, color, drawWithBresenham, rasterized);
+    Entity* entity = new Polygon(vertices, color, drawWithBresenham, rasterize);
     m_scene->addEntity(entity);
 }
 
@@ -277,3 +283,35 @@ void Cli::cmdRemove(int id)
 {
     m_scene->removeEntity(id);
 }
+
+
+void Cli::cmdDisplayEntities() const
+{
+    m_scene->displayEntities();
+}
+
+
+
+void Cli::cmdHelp() const
+{
+    std::cout << "---------- LIST OF COMMANDS ----------" << std::endl;
+
+    std::cout << "load: 'load fileName'" << std::endl;
+    std::cout << "save: 'load fileName'" << std::endl;
+    std::cout << "setLineDrawingMode: 'setLineDrawingMode id drawWithBresenham'" << std::endl;
+    std::cout << "setClippingWindow: 'setClippingWindow xmin xmax ymin ymax'" << std::endl;
+    std::cout << "rasterize: 'rasterize id color'" << std::endl;
+    std::cout << "wireFrame: 'wireFrame id color'" << std::endl;
+    std::cout << "dda: 'dda x1 y1 x2 y2 color'" << std::endl;
+    std::cout << "bresenham: 'bresenham x1 y1 x2 y2 color'" << std::endl;
+    std::cout << "polygon: 'polygon vertices color drawWithBresenham rasterize'" << std::endl;
+    std::cout << "translate: 'translate id xTrans yTrans'" << std::endl;
+    std::cout << "scale: 'scale id xScale yScale'" << std::endl;
+    std::cout << "rotate: 'rotate id angle'" << std::endl;
+    std::cout << "remove: 'remove id'" << std::endl;
+    std::cout << "displayEntities: 'displayEntities'" << std::endl;
+    std::cout << "exit: 'exit'" << std::endl;
+
+    std::cout << "--------------------------------------" << std::endl;
+}
+
