@@ -157,10 +157,10 @@ void Scene::setClippingWindow(float clipXmin, float clipXmax, float clipYmin, fl
     m_clipXmin = clipXmin;  m_clipXmax = clipXmax;
     m_clipYmin = clipYmin;  m_clipYmax = clipYmax;
 
-    Vertex v1(clipXmin, clipYmin);
-    Vertex v2(clipXmax, clipYmin);
-    Vertex v3(clipXmax, clipYmax);
-    Vertex v4(clipXmin, clipYmax);
+    Vertex v1(clipXmin, clipYmax);
+    Vertex v2(clipXmax, clipYmax);
+    Vertex v3(clipXmax, clipYmin);
+    Vertex v4(clipXmin, clipYmin);
 
     m_clippingWindow.clear();
 

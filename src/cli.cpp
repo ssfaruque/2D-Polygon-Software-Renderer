@@ -64,7 +64,16 @@ void Cli::processInput()
         cmdSave(tokens[1]); 
 
     else if(command == "setLineDrawingMode" && tokens.size() >= 3)
-         cmdSetLineDrawingMode(std::stoi(tokens[1]), std::stoi(tokens[2]));
+        cmdSetLineDrawingMode(std::stoi(tokens[1]), std::stoi(tokens[2]));
+
+    else if(command == "setClippingWindow" && tokens.size() >= 5)
+        cmdSetClippingWindow(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3]), std::stof(tokens[4]));
+
+
+
+
+    else if(command == "exit")
+        exit(0);
     
 }
 
@@ -95,4 +104,10 @@ void Cli::cmdSetLineDrawingMode(int id, int drawWithBresenham)
             break;
         }
     }
+}
+
+
+void Cli::cmdSetClippingWindow(float xmin, float xmax, float ymin, float ymax)
+{
+    m_scene->setClippingWindow(xmin, xmax, ymin, ymax);
 }
