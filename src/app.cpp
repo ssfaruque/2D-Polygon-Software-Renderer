@@ -87,11 +87,18 @@ void renderScene()
     vertices.push_back(v9);
 
 
-    // Scene scene;
-    // scene.load("input/sample.txt");
-    // scene.displayEntities();
-    // scene.draw();
-    // scene.save("input/output_sameple.txt");
+    Entity* entity = new Polygon(vertices, 0xFFFFFFFF, true, true);
+
+    entity->translate(Vector2f(0.3f, -0.3f));
+    entity->scale(Vector2f(0.5f, 0.5f));
+    entity->rotate(45.0);
+
+    Scene scene;
+    scene.load("input/sample.txt");
+    scene.addEntity(entity);
+    scene.displayEntities();
+    scene.draw();
+    scene.save("input/output_sameple.txt");
 
     // Matrix3f translationMatrix = createTranslationMatrix3f(Vector2f(0.0f, 0.1f));
 
@@ -101,27 +108,24 @@ void renderScene()
 
     // std::cout << "(" << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << ")" << std::endl;    
 
-    std::vector<Vertex> clippingWindow{};
+    // std::vector<Vertex> clippingWindow{};
 
-    Vertex clipV1(0.0f, 0.0f);
-    Vertex clipV2(0.5f, 0.0f);
-    Vertex clipV3(0.5f, 0.3f);
-    Vertex clipV4(0.0f, 0.3f);
+    // Vertex clipV1(0.2, 0.7f);
+    // Vertex clipV2(0.8f, 0.7f);
+    // Vertex clipV3(0.8f, -0.2f);
+    // Vertex clipV4(0.2f, -0.2f);
 
-    clippingWindow.push_back(clipV1);
-    clippingWindow.push_back(clipV2);
-    clippingWindow.push_back(clipV3);
-    clippingWindow.push_back(clipV4);
+    // clippingWindow.push_back(clipV1);
+    // clippingWindow.push_back(clipV2);
+    // clippingWindow.push_back(clipV3);
+    // clippingWindow.push_back(clipV4);
 
-
-
-    Entity* entity = new Polygon({}, 0xFFFFFFFF, true, true);
-    entity->addVertex(Vertex(0.0f, 0.0f));
-    entity->addVertex(Vertex(0.5f, 0.0f));
-    entity->addVertex(Vertex(0.0f, 0.5f));
-    entity->draw(clippingWindow);
-
-
+    // Entity* entity = new Polygon({}, 0xFFFFFFFF, true, true);
+    // entity->addVertex(Vertex(0.0f, 0.0f));
+    // entity->addVertex(Vertex(0.5f, 0.0f));
+    // entity->addVertex(Vertex(0.5f, 0.5f));
+    // entity->addVertex(Vertex(0.0f, 0.5f));
+    // entity->draw(clippingWindow);
 
 
     showScreen();

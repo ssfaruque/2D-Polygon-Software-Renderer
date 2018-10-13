@@ -29,57 +29,58 @@ void Polygon::draw(const std::vector<Vertex>& clippingWindow)
         ymax = vertex.y > ymax ? vertex.y : ymax;
     }
 
-    for(int i = 0, size = int(m_vertices.size()); i < size; ++i)
+    if(!vertices.empty())
     {
-        float x1 = 0.0f, y1 = 0.0f, x2 = 0.0f, y2 = 0.0f;
-
-        if(i == size - 1)
+        for(int i = 0, size = int(vertices.size()); i < size; ++i)
         {
-            x1 = m_vertices[i].x;
-            y1 = m_vertices[i].y;
-            x2 = m_vertices[0].x;
-            y2 = m_vertices[0].y;  
-        }
-        
-        else
-        {
-            x1 = m_vertices[i].x;
-            y1 = m_vertices[i].y;
-            x2 = m_vertices[i + 1].x;
-            y2 = m_vertices[i + 1].y;
-        }
+            float x1 = 0.0f, y1 = 0.0f, x2 = 0.0f, y2 = 0.0f;
 
-        float initialx1 = x1;
-        float initialy1 = y1;
-        float initialx2 = x2;
-        float initialy2 = y2;
+            if(i == size - 1)
+            {
+                x1 = vertices[i].x;
+                y1 = vertices[i].y;
+                x2 = vertices[0].x;
+                y2 = vertices[0].y;  
+            }
+            
+            else
+            {
+                x1 = vertices[i].x;
+                y1 = vertices[i].y;
+                x2 = vertices[i + 1].x;
+                y2 = vertices[i + 1].y;
+            }
 
-        clipToNormalCoords(&x1, &y1, xmin, xmax, ymin, ymax);
-        clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
+            float initialx1 = x1;
+            float initialy1 = y1;
+            float initialx2 = x2;
+            float initialy2 = y2;
 
-        float normalx1 = x1;
-        float normaly1 = y1;
-        float normalx2 = x2;
-        float normaly2 = y2;
+            clipToNormalCoords(&x1, &y1, xmin, xmax, ymin, ymax);
+            clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
+
+            float normalx1 = x1;
+            float normaly1 = y1;
+            float normalx2 = x2;
+            float normaly2 = y2;
 
 
-        normalToScreenCoords(&x1, &y1);
-        normalToScreenCoords(&x2, &y2);    
-        drawLine(x1, y1, x2, y2, 0xffffffff, m_drawWithBresenham);
-    }
-
-    if(m_rasterized)
-    {
-        std::vector<Vertex> vertices = m_vertices;
-
-        for(auto& vertex : vertices)
-        {
-            clipToNormalCoords(&vertex.x, &vertex.y, xmin, xmax, ymin, ymax);
-
-            normalToScreenCoords(&vertex.x, &vertex.y);
+            normalToScreenCoords(&x1, &y1);
+            normalToScreenCoords(&x2, &y2);    
+            drawLine(x1, y1, x2, y2, 0xffffffff, m_drawWithBresenham);
         }
 
-        polygonFill(vertices, m_color);
+        if(m_rasterized)
+        {
+            for(auto& vertex : vertices)
+            {
+                clipToNormalCoords(&vertex.x, &vertex.y, xmin, xmax, ymin, ymax);
+
+                normalToScreenCoords(&vertex.x, &vertex.y);
+            }
+
+            polygonFill(vertices, m_color);
+        }
     }
 }
 

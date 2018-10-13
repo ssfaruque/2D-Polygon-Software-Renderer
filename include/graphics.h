@@ -29,7 +29,7 @@ void clipToNormalCoords(float* x, float* y, float xmin, float xmax, float ymin, 
 /*
  * Draws a single pixel to the frame buffer
  */
-void drawPixel(float x, float y, Color color, bool normalized = true);
+void drawPixel(float x, float y, Color color, bool normalized = false);
 
 
 /*
