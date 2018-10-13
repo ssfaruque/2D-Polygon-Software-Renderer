@@ -51,6 +51,7 @@ class Polygon : public Entity
         void draw(const std::vector<Vertex>& clippingWindow) override;
 
         void printDescription() const override;
+        inline void setRasterizationStatus(bool rasterized) {m_rasterized = rasterized;}
 
 };
 

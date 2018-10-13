@@ -88,6 +88,8 @@ void renderScene()
 
     App* app = App::getInstance();
 
+    app->m_scene->displayEntities();
+
     app->m_cli->processInput();
 
 

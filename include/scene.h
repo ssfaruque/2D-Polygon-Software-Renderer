@@ -31,6 +31,7 @@ class Scene
         void load(std::string loadFileName);
         void save(std::string saveFileName) const;
         void setClippingWindow(float clipXmin, float clipXmax, float clipYmin, float clipYmax);
+        void removeEntity(uint id);
 
         friend class Cli;
 };

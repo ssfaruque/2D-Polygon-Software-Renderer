@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 #include "scene.h"
 #include "primitive.h"
@@ -168,4 +169,13 @@ void Scene::setClippingWindow(float clipXmin, float clipXmax, float clipYmin, fl
     m_clippingWindow.push_back(v2);
     m_clippingWindow.push_back(v3);
     m_clippingWindow.push_back(v4);
+}
+
+
+void Scene::removeEntity(uint id)
+{
+    auto newEnd = std::remove_if(m_entities.begin(),
+                   m_entities.end(),
+                   [id](Entity* entity){return entity->getId() == id;});
+    m_entities.erase(newEnd, m_entities.end());
 }

@@ -8,6 +8,25 @@ void Line::draw(const std::vector<Vertex>& clippingWindow)
 {
     float x1 = m_vertices[0].x, y1 = m_vertices[0].y,
           x2 = m_vertices[1].x, y2 = m_vertices[1].y;
+
+
+    float xmin = clippingWindow[0].x, xmax = clippingWindow[0].x;
+    float ymin = clippingWindow[0].y, ymax = clippingWindow[0].y;
+
+    for(const auto& vertex : clippingWindow)
+    {
+        xmin = vertex.x < xmin ? vertex.x : xmin;
+        xmax = vertex.x > xmax ? vertex.x : xmax;
+        ymin = vertex.y < ymin ? vertex.y : ymin;
+        ymax = vertex.y > ymax ? vertex.y : ymax;
+    }
+
+    // cohen sutherland
+
+    clipToNormalCoords(&x1, &y1, xmin, xmax, ymin, ymax);
+    clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
+
+
     normalToScreenCoords(&x1, &y1);
     normalToScreenCoords(&x2, &y2);
     drawLine(x1, y1, x2, y2, m_color, m_drawWithBresenham);
