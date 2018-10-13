@@ -3,6 +3,7 @@
 
 class Window;
 class Scene;
+class Cli;
 
 class App
 {
@@ -10,10 +11,18 @@ class App
         bool m_running;
         Window* m_window;
         Scene* m_scene;
+        Cli* m_cli;
+        static App* m_app;
 
-    public:
+    private:
         App(const char* title, const int width, const int height,
             int* argc, char** argv);
+
+    public:
+        static void create(const char* title, const int width, const int height,
+                           int* argc, char** argv);
+        static App* getInstance();
+
         ~App();
         inline bool isRunning() const {return m_running;};
 
@@ -21,6 +30,9 @@ class App
          * run main loop
          */
         void run();
+
+        friend void renderScene();
+
 };
 
 

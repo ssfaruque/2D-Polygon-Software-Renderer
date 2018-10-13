@@ -4,8 +4,9 @@
 #include <vector>
 #include <string>
 
-#include "entity.h"
+#include "types.h"
 
+class Entity;
 
 class Scene
 {
@@ -31,6 +32,7 @@ class Scene
         void save(std::string saveFileName) const;
         void setClippingWindow(float clipXmin, float clipXmax, float clipYmin, float clipYmax);
 
+        friend class Cli;
 };
 
 

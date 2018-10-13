@@ -7,6 +7,7 @@
 #include "primitive.h"
 
 
+
 Scene::Scene():
 m_entities({}),
  m_clippingWindow({}),
@@ -70,6 +71,15 @@ void Scene::displayEntities() const
 
 void Scene::load(std::string loadFileName)
 {
+    m_entities.clear();
+    m_clipXmin = -1.0f; m_clipXmax = 1.0f;
+    m_clipYmin = -1.0f; m_clipYmax = 1.0f;
+    m_clippingWindow.clear();
+    m_clippingWindow.push_back(Vertex(m_clipXmin, m_clipYmax));
+    m_clippingWindow.push_back(Vertex(m_clipXmax, m_clipYmax));
+    m_clippingWindow.push_back(Vertex(m_clipXmax, m_clipYmin));
+    m_clippingWindow.push_back(Vertex(m_clipXmin, m_clipYmin));
+
     std::ifstream inf(loadFileName);
     std::string line;
     std::stringstream iss;

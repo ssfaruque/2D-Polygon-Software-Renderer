@@ -14,6 +14,7 @@ class Entity
     protected:
         uint m_id;
         Color m_color;
+        bool m_drawWithBresenham; // if false, draws with dda instead
         std::vector<Vertex> m_vertices;
 
     protected:
@@ -27,7 +28,7 @@ class Entity
         {m_color = color;}
 
         Entity():
-        m_id(nextIDNum++), m_color(0xFFFFFFFF), m_vertices({})
+        m_id(nextIDNum++), m_color(0xFFFFFFFF), m_drawWithBresenham(false), m_vertices({})
         {}
 
         virtual ~Entity() = default;
@@ -35,6 +36,7 @@ class Entity
         inline uint getId() const {return m_id;}
         inline void addVertex(const Vertex& vertex) {m_vertices.push_back(vertex);};
         inline uint getNumVertices() const {return uint(m_vertices.size());}
+        inline void setDrawWithBresenhamStatus(bool drawWithBresenham) {m_drawWithBresenham = drawWithBresenham;}
 
         
         void translate(const Vector2f& vector);
