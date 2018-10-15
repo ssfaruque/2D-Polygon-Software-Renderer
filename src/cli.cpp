@@ -1,38 +1,27 @@
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#endif
+
+#ifdef __linux__
+#include <GL/glut.h>
+#endif
+
 #include <iostream>
 #include <sstream>
+#include <GL/gl.h>
+
 
 #include "cli.h"
+#include "window.h"
 #include "scene.h"
 #include "entity.h"
 #include "primitive.h"
+#include "frameBuffer.h"
+
 
 Cli::Cli(Scene* scene):
 m_scene(scene)
 {}
-
-
-void Cli::run()
-{
-    while(true)
-    {
-        processInput();
-    }
-}
-
-
-
-std::string commands[] = {"load",
-                          "save",
-                          "setLineDrawingMode", 
-                          "setClippingWindow",
-                          "rasterize",
-                          "dda",
-                          "bresenham",
-                          "polygon",
-                          "translate",
-                          "scale",
-                          "rotate"};
-
 
 
 std::vector<std::string> Cli::getTokensFromLine(const std::string& line) const
@@ -58,7 +47,6 @@ void Cli::processInput()
 
     std::string command = !tokens.empty() ? tokens[0] : "";
     std::stringstream ss;
-
 
     if(command == "load" && tokens.size() == 2)
         cmdLoad(tokens[1]);    
@@ -107,17 +95,17 @@ void Cli::processInput()
     else if(command == "polygon" && tokens.size() >= 7)
     {
         int numVertices = std::stoi(tokens[1]);
-        std::vector<Vertex> vertices(numVertices);
+        std::vector<Vertex> vertices{};
 
-        for(int i = 0; i < numVertices; ++i)
+        for(int i = 0; i < numVertices * 2; i += 2)
             vertices.push_back(Vertex(std::stof(tokens[i + 2]), std::stof(tokens[i + 3])));
 
         Color color(0xFFFFFFFF);
-        ss << std::hex << tokens[2 + numVertices];
+        ss << std::hex << tokens[2 + numVertices * 2];
         ss >> color.color;
 
-        bool drawWithBresenham = bool(std::stoi(tokens[3 + numVertices]));
-        bool rasterized = bool(std::stoi(tokens[4 + numVertices]));
+        bool drawWithBresenham = bool(std::stoi(tokens[3 + numVertices * 2]));
+        bool rasterized = bool(std::stoi(tokens[4 + numVertices * 2]));
 
         cmdPolygon(vertices, color, drawWithBresenham, rasterized);
     }
@@ -137,14 +125,18 @@ void Cli::processInput()
     else if(command == "help" && tokens.size() == 1)
         cmdHelp();
 
-    else if(command == "displayEntities" && tokens.size() == 1)
+    else if(command == "displayContents" && tokens.size() == 1)
         cmdDisplayEntities();
 
+    else if(command == "setViewport" && tokens.size() == 5)
+        cmdSetViewport(std::stof(tokens[1]), std::stof(tokens[2]), std::stoi(tokens[3]), std::stoi(tokens[4]));
+    
     else if(command == "exit")
         exit(0);
-    
-}
 
+    else if(tokens.size() > 0)
+        std::cout << "Invalid command: " << inputLine << std::endl;
+}
 
 
 void Cli::cmdLoad(const std::string fileName)
@@ -291,27 +283,43 @@ void Cli::cmdDisplayEntities() const
 }
 
 
+void screenToNormalCoords(float* x, float* y)
+{
+    Window *window = Window::getInstance();
+    *x = ((2.0f / window->getWidth())  * (*x)) - 1;
+    *y = ((2.0f / window->getHeight()) * (*y)) - 1;
+}
+
+
+void Cli::cmdSetViewport(float x, float y, int width, int height) const
+{
+    screenToNormalCoords(&x, &y);
+    glRasterPos2f(x, y);
+    Window::getInstance()->resizeFrameBuffer(width, height);
+}
+
+
 
 void Cli::cmdHelp() const
 {
     std::cout << "---------- LIST OF COMMANDS ----------" << std::endl;
 
     std::cout << "load: 'load fileName'" << std::endl;
-    std::cout << "save: 'load fileName'" << std::endl;
+    std::cout << "save: 'save fileName'" << std::endl;
     std::cout << "setLineDrawingMode: 'setLineDrawingMode id drawWithBresenham'" << std::endl;
     std::cout << "setClippingWindow: 'setClippingWindow xmin xmax ymin ymax'" << std::endl;
     std::cout << "rasterize: 'rasterize id color'" << std::endl;
     std::cout << "wireFrame: 'wireFrame id color'" << std::endl;
     std::cout << "dda: 'dda x1 y1 x2 y2 color'" << std::endl;
     std::cout << "bresenham: 'bresenham x1 y1 x2 y2 color'" << std::endl;
-    std::cout << "polygon: 'polygon vertices color drawWithBresenham rasterize'" << std::endl;
+    std::cout << "polygon: 'polygon numVertices vertices... color drawWithBresenham rasterize'" << std::endl;
     std::cout << "translate: 'translate id xTrans yTrans'" << std::endl;
     std::cout << "scale: 'scale id xScale yScale'" << std::endl;
     std::cout << "rotate: 'rotate id angle'" << std::endl;
     std::cout << "remove: 'remove id'" << std::endl;
-    std::cout << "displayEntities: 'displayEntities'" << std::endl;
+    std::cout << "displayContents: 'displayContents'" << std::endl;
+    std::cout << "setViewport: 'setViewport x y width height'" << std::endl;
     std::cout << "exit: 'exit'" << std::endl;
 
     std::cout << "--------------------------------------" << std::endl;
 }
-

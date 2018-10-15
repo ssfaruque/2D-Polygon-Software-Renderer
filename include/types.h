@@ -38,7 +38,6 @@ struct Color
 
 
 
-
 struct Vertex
 {
     float x;
@@ -63,9 +62,6 @@ struct Edge
     yMax(pyMax), yMin(pyMin), startingX(pstartingX), slopeInv(pslopeInv)
     {}
 };
-
-
-
 
 
 #endif  // TYPES_H

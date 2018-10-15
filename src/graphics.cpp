@@ -26,8 +26,12 @@ inline uint absVal(int num) { return num > 0 ? num : (num * -1); }
 void normalToScreenCoords(float* x, float* y)
 {
     Window *window = Window::getInstance();
-    *x = (window->getWidth() / 2) * (*x + 1);
-    *y = (window->getHeight() / 2) * (*y + 1);
+    *x = (window->getFrameBuffer()->getWidth() / 2) * (*x + 1);
+    *y = (window->getFrameBuffer()->getHeight() / 2) * (*y + 1);
+
+    // clamp x and y to boundaries, index in array starts at 0
+    *x = uint(*x) == window->getFrameBuffer()->getWidth()  ? window->getFrameBuffer()->getWidth()  - 1 : *x;
+    *y = uint(*y) == window->getFrameBuffer()->getHeight() ? window->getFrameBuffer()->getHeight() - 1 : *y;
 }
 
 
@@ -41,13 +45,12 @@ void clipToNormalCoords(float* x, float* y, float xmin, float xmax, float ymin, 
 } 
 
 
-
 void drawPixel(float x, float y, Color color, bool normalized)
 {
     Window *window = Window::getInstance();
     if (normalized){normalToScreenCoords(&x, &y);}
 
-    if (!(x >= 0 && x <= window->getWidth() && y >= 0 && y <= window->getHeight()))
+    if (!(x >= 0 && x <= window->getFrameBuffer()->getWidth() && y >= 0 && y <= window->getFrameBuffer()->getHeight()))
     {
         std::cout << "** pixel out of bounds **" << std::endl;
         std::cout << "Screen coords -> "
@@ -66,15 +69,8 @@ void drawLine(uint x1, uint y1, uint x2, uint y2, Color color, bool drawWithBres
 }
 
 
-
-
-
-
 void dda(float x1, float y1, float x2, float y2, Color color)
 {
-    //normalToScreenCoords(&x1, &y1);
-    //normalToScreenCoords(&x2, &y2);
-
     int deltaX = x2 - x1;
     int deltaY = y2 - y1;
     int numSteps = absVal(deltaX) > absVal(deltaY) ? absVal(deltaX) : absVal(deltaY);
@@ -89,24 +85,21 @@ void dda(float x1, float y1, float x2, float y2, Color color)
 
     for (int step = 0; step < numSteps; ++step)
     {
-        drawPixel((uint)(x + roundTerm), (uint)(y + roundTerm), color, false);
+        drawPixel((x + roundTerm), (y + roundTerm), color, false);
         x += xStep;
         y += yStep;
     }
 }
 
 
-
 void bresenham(float x1, float y1, float x2, float y2, Color color)
 {
-    //normalToScreenCoords(&x1, &y1);
-    //normalToScreenCoords(&x2, &y2);
-
     int absDeltaX = absVal(x2 - x1);
     int absDeltaY = absVal(y2 - y1);
 
     if(absDeltaY < absDeltaX)   // slope < 1
     {
+        // switch order of parameters depending on order of vertices
         x1 < x2 ?
         bresenhamSmallSlope(x1, y1, x2, y2, color) :
         bresenhamSmallSlope(x2, y2, x1, y1, color);
@@ -114,6 +107,7 @@ void bresenham(float x1, float y1, float x2, float y2, Color color)
 
     else    // slope >= 1
     {
+        // switch order of parameters depending on order of vertices
         y1 < y2 ?
         bresenhamHighSlope(x1, y1, x2, y2, color) :
         bresenhamHighSlope(x2, y2, x1, y1, color);
@@ -121,6 +115,7 @@ void bresenham(float x1, float y1, float x2, float y2, Color color)
 }
 
 
+// When slope < 1
 void bresenhamSmallSlope(uint x1, uint y1, uint x2, uint y2, Color color)
 {
     int deltaX = x2 - x1;
@@ -145,6 +140,7 @@ void bresenhamSmallSlope(uint x1, uint y1, uint x2, uint y2, Color color)
 }
 
 
+// When slope >= 1
 void bresenhamHighSlope(uint x1, uint y1, uint x2, uint y2, Color color)
 {
     int deltaX = x2 - x1;
@@ -167,11 +163,6 @@ void bresenhamHighSlope(uint x1, uint y1, uint x2, uint y2, Color color)
         error += (2 * deltaX);
     }
 }
-
-
-
-
-
 
 
 std::vector<Edge> createEdges(const std::vector<Vertex>& vertices)
@@ -280,7 +271,6 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
 {
     // supposed to add only non horizontal edges to table
     std::vector<Edge> edges = createEdges(vertices);
-    //printEdges(edges);
     std::vector<std::vector<Edge>> edgeList = createEdgeList(edges);
 
     int yMin = edges[0].yMin, yMax = edges[0].yMax;
@@ -329,8 +319,6 @@ void polygonFill(const std::vector<Vertex>& vertices, Color color)
 }
 
 
-
-
 enum ClipWindowCode
 {
     LEFT    = 1 << 0,
@@ -340,7 +328,7 @@ enum ClipWindowCode
 };
 
 
-uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float ymax)
+uint calcCoding(float x, float y, float xmin, float xmax, float ymin, float ymax)
 {
     uint coding =  0;
 
@@ -353,22 +341,19 @@ uint computeCoding(float x, float y, float xmin, float xmax, float ymin, float y
 }
 
 
-inline bool isInside(uint code1, uint code2) {return !(code1 | code2);}
+inline bool isInside(uint code1, uint code2)  {return !(code1 | code2);}
 inline bool isOutside(uint code1, uint code2) {return (code1 & code2);}
 
 void cohenSutherlandClipping(Vertex* v1, Vertex* v2, float xmin, float xmax, float ymin, float ymax)
 {
     float boundaryOffset = 0.0000001f;
 
-    uint code1 = computeCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
-    uint code2 = computeCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
+    uint code1 = calcCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
+    uint code2 = calcCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
 
     while (true)
     {
-        if (isInside(code1, code2))
-            break;
-
-        else if (isOutside(code1, code2))
+        if (isInside(code1, code2) || isOutside(code1, code2))
             break;
 
         else // partially inside clipping window
@@ -404,14 +389,14 @@ void cohenSutherlandClipping(Vertex* v1, Vertex* v2, float xmin, float xmax, flo
             {
                 v1->x = x;
                 v1->y = y;
-                code1 = computeCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
+                code1 = calcCoding(v1->x, v1->y, xmin, xmax, ymin, ymax);
             }
 
             else
             {
                 v2->x = x;
                 v2->y = y;
-                code2 = computeCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
+                code2 = calcCoding(v2->x, v2->y, xmin, xmax, ymin, ymax);
             }
         }
     }
@@ -458,7 +443,7 @@ std::vector<Vertex> clipPointsWithWindow(const std::vector<Vertex>& vertices, co
         }
 
         else if(p1 < 0 && p2 >= 0)
-            clippedVertices.push_back(intersectionPoint(v1, v2, clipV1, clipV2));      
+            clippedVertices.push_back(intersectionPoint(v1, v2, clipV1, clipV2)); 
     }
 
     return clippedVertices;

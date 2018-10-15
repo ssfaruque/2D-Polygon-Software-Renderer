@@ -13,6 +13,7 @@ class Cli
         Scene* m_scene;
 
     private:
+        // All possible commands
         void cmdLoad(const std::string fileName);
         void cmdSave(const std::string fileName);
         void cmdSetLineDrawingMode(int id, int drawWithBresenham);
@@ -27,6 +28,7 @@ class Cli
         void cmdRotate(int id, float angle);
         void cmdRemove(int id);
         void cmdDisplayEntities() const;
+        void cmdSetViewport(float x, float y, int width, int height) const;
         void cmdHelp() const;
 
         std::vector<std::string> getTokensFromLine(const std::string& line) const;
@@ -35,7 +37,6 @@ class Cli
         Cli(Scene* scene);
         ~Cli() = default;
 
-        void run();
         void processInput();
 };
 

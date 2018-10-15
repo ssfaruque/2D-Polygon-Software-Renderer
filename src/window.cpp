@@ -70,3 +70,9 @@ void Window::clear(Color color)
     glClear(GL_COLOR_BUFFER_BIT);
     m_frameBuffer->clear(color);
 }
+
+
+void Window::resizeFrameBuffer(uint width, uint height)
+{
+    m_frameBuffer->resizeBuffer(width, height);
+}

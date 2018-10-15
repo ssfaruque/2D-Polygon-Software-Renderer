@@ -1,6 +1,6 @@
 
 CPP			:= g++
-CPPFLAGS	:= -g -Wall -std=c++11
+CPPFLAGS	:= -g -Wall -std=c++11 -O3
 
 INCLUDEDIR	:= include
 SRCDIR		:= src
@@ -11,7 +11,7 @@ OS := $(shell uname -s)
 
 ifeq ($(OS), Linux)
     LIBS	:= -lGL -lglut
-	#CPPFLAGS += -Werror
+	CPPFLAGS += -Werror
 endif
 
 ifeq ($(OS), Darwin)

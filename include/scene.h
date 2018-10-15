@@ -8,6 +8,11 @@
 
 class Entity;
 
+/* Everything is drawn to the scene and at the
+ * end of each iteration of the render loop,
+ * the entire scene will be written to the
+ * pixel buffer
+ */
 class Scene
 {
     private:
@@ -17,7 +22,6 @@ class Scene
         float m_clipXmax;
         float m_clipYmin;
         float m_clipYmax;
-
 
     public:
         Scene();
@@ -35,7 +39,6 @@ class Scene
 
         friend class Cli;
 };
-
 
 
 #endif  // SCENE_H

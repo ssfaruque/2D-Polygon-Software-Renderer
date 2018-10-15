@@ -26,11 +26,8 @@ void FrameBuffer::setPixel(uint x, uint y, u32 data)
      * corner of the screen with x increasing from left
      * to right and y increasing from bottom to top
      */
-    //uint index = (m_width * m_height) - y * m_width + x;
     uint index = y * m_width + x;
     m_buffer[index] = data;
-    //std::cout << "Screen coords -> " << "x: " << x << ", y: " << y << std::endl << std::endl;
-
 }
 
 
@@ -38,4 +35,14 @@ void FrameBuffer::clear(Color color)
 {
     for(uint i = 0; i < m_width * m_height; ++i)
         m_buffer[i] = color.color;
+}
+
+
+void FrameBuffer::resizeBuffer(uint width, uint height)
+{
+    m_width = width;
+    m_height = height;
+    delete [] m_buffer;
+    m_buffer = new u32[m_width * m_height];
+    clear(0);
 }

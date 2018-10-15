@@ -26,20 +26,11 @@ using Matrix4f = glm::mat4;
 
 inline float toRadians(float angle) {return glm::radians(angle);}
 
-
+// 2D transformations
 Matrix3f createTranslationMatrix3f(const Vector2f& vector);
-Matrix4f createTranslationMatrix4f(const Vector3f& vector);
-
-
 Matrix3f createScaleMatrix3f(const Vector2f& vector);
-Matrix4f createScaleMatrix4f(const Vector3f& vector);
-
-
 Matrix3f create2DRotateMatrix(const Vertex& centroid, float angle);
 
-Matrix4f createRotateXMatrix4f(float angle);
-Matrix4f createRotateYMatrix4f(float angle);
-Matrix4f createRotateZMatrix4f(float angle);
 
 
 

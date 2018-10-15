@@ -4,6 +4,34 @@
 #include "primitive.h"
 #include "graphics.h"
 
+Line::Line(const Vertex &v1, const Vertex &v2, Color color, bool drawWithBresenham)
+
+{
+    m_drawWithBresenham = drawWithBresenham;
+    m_vertices.push_back(v1);
+    m_vertices.push_back(v2);
+    m_color = color;
+}
+
+
+Line::Line()
+{
+}
+
+
+Polygon::Polygon(const std::vector<Vertex> &vertices, Color color, bool drawWithBresenham, bool rasterized) : m_rasterized(rasterized)
+{
+    m_drawWithBresenham = drawWithBresenham;
+    m_vertices = vertices;
+    m_color = color;
+}
+
+
+Polygon::Polygon(): m_rasterized(false)
+{
+}
+
+
 void Line::draw(const std::vector<Vertex>& clippingWindow)
 {
     float xmin = clippingWindow[0].x, xmax = clippingWindow[0].x;
@@ -17,7 +45,6 @@ void Line::draw(const std::vector<Vertex>& clippingWindow)
         ymax = vertex.y > ymax ? vertex.y : ymax;
     }
 
-
     Vertex v1 = m_vertices[0];
     Vertex v2 = m_vertices[1];
 
@@ -30,7 +57,7 @@ void Line::draw(const std::vector<Vertex>& clippingWindow)
     clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
     normalToScreenCoords(&x1, &y1);
     normalToScreenCoords(&x2, &y2);
-    
+
     drawLine(x1, y1, x2, y2, m_color, m_drawWithBresenham);
 }
 
@@ -72,23 +99,11 @@ void Polygon::draw(const std::vector<Vertex>& clippingWindow)
                 y2 = vertices[i + 1].y;
             }
 
-            float initialx1 = x1;
-            float initialy1 = y1;
-            float initialx2 = x2;
-            float initialy2 = y2;
-
             clipToNormalCoords(&x1, &y1, xmin, xmax, ymin, ymax);
             clipToNormalCoords(&x2, &y2, xmin, xmax, ymin, ymax);
-
-            float normalx1 = x1;
-            float normaly1 = y1;
-            float normalx2 = x2;
-            float normaly2 = y2;
-
-
             normalToScreenCoords(&x1, &y1);
             normalToScreenCoords(&x2, &y2);    
-            drawLine(x1, y1, x2, y2, 0xffffffff, m_drawWithBresenham);
+            drawLine(x1, y1, x2, y2, m_color, m_drawWithBresenham);
         }
 
         if(m_rasterized)
@@ -104,8 +119,6 @@ void Polygon::draw(const std::vector<Vertex>& clippingWindow)
         }
     }
 }
-
-
 
 
 void Line::printDescription() const
@@ -124,5 +137,3 @@ void Polygon::printDescription() const
               << " type: " << std::setw(10) << "Polygon "
               << "numSides: " << getNumVertices() << std::endl;
 }
-
-

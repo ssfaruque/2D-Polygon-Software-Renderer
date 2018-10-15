@@ -23,8 +23,6 @@
 App* App::m_app = nullptr;
 
 
-
-
 void renderScene();
 void showScreen();
 
@@ -35,7 +33,7 @@ m_running(true)
 {
     Window::create(width, height, title, argc, argv);
     m_window = Window::getInstance();
-    m_scene = new Scene("input/sample.txt");
+    m_scene = new Scene;
     m_cli = new Cli(m_scene);
 }
 
@@ -44,8 +42,6 @@ App::~App()
 {
     if(m_window)
         Window::destroy();
-
-    m_scene->save("input/output_sample.txt");
 
     if(m_scene)
         delete m_scene;
@@ -65,18 +61,14 @@ void App::create(const char* title, const int width, const int height,
 
 App* App::getInstance()
 {
-    if(App::m_app)
-        return m_app;
-
-    return nullptr;
+    return m_app;
 }
 
 
 void App::run()
 {
-    std::cout << "Loading scene..." << std::endl << std::endl;
+    std::cout << "Creating application..." << std::endl << std::endl;
     glutDisplayFunc(renderScene);
-    //glutIdleFunc(renderScene);
     glutMainLoop();
 }
 
@@ -99,10 +91,11 @@ void showScreen()
 {
     Window* window = Window::getInstance();
 
-    glDrawPixels(window->getWidth(),
-                window->getHeight(),
+    glDrawPixels(window->getFrameBuffer()->getWidth(),
+                 window->getFrameBuffer()->getHeight(),
                  GL_RGBA,
                  GL_UNSIGNED_INT_8_8_8_8,
-                window->getFrameBuffer()->getBuffer());
+                 window->getFrameBuffer()->getBuffer());
+    
     glutSwapBuffers();    
 }

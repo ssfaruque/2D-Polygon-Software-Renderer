@@ -37,13 +37,10 @@ class Entity
         inline void addVertex(const Vertex& vertex) {m_vertices.push_back(vertex);};
         inline uint getNumVertices() const {return uint(m_vertices.size());}
         inline void setDrawWithBresenhamStatus(bool drawWithBresenham) {m_drawWithBresenham = drawWithBresenham;}
-
         
         void translate(const Vector2f& vector);
         void scale(const Vector2f& vector);
         void rotate(float angle);
-
-
 
         friend class Scene;
 };

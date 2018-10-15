@@ -29,12 +29,8 @@ class Window
         inline uint getHeight() const {return m_height;};
         FrameBuffer* getFrameBuffer() {return m_frameBuffer;}
         void clear(Color color = {0});
-
-
-    
+        void resizeFrameBuffer(uint width, uint height);    
 };
-
-
 
 
 #endif  // WINDOW_H
