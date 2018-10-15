@@ -1,9 +1,6 @@
 .vscode
 */.vscode
 
-build/objs/*
-build/deps/*
-
 out
 
 # Prerequisites
