@@ -36,12 +36,15 @@ void Entity::translate(const Vector2f& vector)
 void Entity::scale(const Vector2f& vector)
 {
     Matrix3f scaleMatrix = createScaleMatrix3f(vector);
+    Vertex centroid = calcCentroid();
 
     for(auto& vertex : m_vertices)
     {
+        translate(Vector2f(-centroid.x, -centroid.y));     
         Vector3f vertexVecCast = Vector3f(vertex.x, vertex.y, 1.0f);
         Vector3f newPosition = scaleMatrix * vertexVecCast;   
-        vertex = Vertex(newPosition.x, newPosition.y);                  
+        vertex = Vertex(newPosition.x, newPosition.y);
+        translate(Vector2f(centroid.x, centroid.y));      
     }
 }
 
